@@ -6,12 +6,13 @@ import AccommodationForm from '../components/AccommodationForm';
 import { Accommodation } from '../types/Accommodation';
 import { useStore } from '../store';
 import { useApi } from '../hooks/useApi';
+import React from 'react';
 
 const Accommodations = () => {
   const currentUser = useStore(s => s.currentUser);
   const accommodations = useStore(s => s.accommodations);
   const setAccommodations = useStore(s => s.setAccommodations);
-  const { createAccommodation, updateAccommodation } = useApi();
+  const { createAccommodation, updateAccommodation, loadAccommodations } = useApi();
   const addToast = useStore(s => s.addToast);
   const [searchTerm, setSearchTerm] = useState('');
   const [roomTypeFilter, setRoomTypeFilter] = useState<Accommodation['roomType'] | 'all'>('all');
@@ -20,6 +21,10 @@ const Accommodations = () => {
   const [editingAccommodation, setEditingAccommodation] = useState<Accommodation | null>(null);
 
   const roomTypes: Array<Accommodation['roomType'] | 'all'> = ['all', 'single', 'double', 'suite', 'apartment', 'villa', 'hostel'];
+
+  React.useEffect(() => {
+    loadAccommodations().catch(() => {});
+  }, [loadAccommodations]);
 
   const filteredAccommodations = accommodations.filter(accommodation => {
     const matchesSearch = accommodation.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -40,10 +45,24 @@ const Accommodations = () => {
   };
 
   const handleSaveAccommodation = async (accommodation: Accommodation) => {
+    const payload: any = {
+      name: accommodation.name,
+      description: accommodation.description,
+      type: (accommodation.roomType || 'DOUBLE').toUpperCase(),
+      pricePerNight: Number((accommodation as any).pricePerNight || 0),
+      costPerNight: (accommodation as any).costPerNight ? Number((accommodation as any).costPerNight) : undefined,
+      maxOccupancy: Number(accommodation.maxOccupancy || accommodation.maxCapacity || 1),
+      address: (accommodation as any).address || '',
+      amenities: (accommodation as any).amenities ? (accommodation as any).amenities.join(',') : undefined,
+      rating: (accommodation as any).rating || undefined,
+      isActive: accommodation.isActive !== false,
+      isTemplate: false,
+    };
+
     if (accommodation.id) {
-      await updateAccommodation(accommodation.id, accommodation);
+      await updateAccommodation(accommodation.id, payload);
     } else {
-      await createAccommodation(accommodation as any);
+      await createAccommodation(payload);
     }
     addToast({ id: Date.now().toString(), message: 'Accommodation saved!', type: 'success' });
   };

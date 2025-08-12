@@ -94,14 +94,15 @@ const Menus = () => {
       await createMenu({
         name: `${menu.name} (Copy)`,
         description: menu.description,
-        type: menu.type,
+        type: (menu.type || 'DINNER').toUpperCase(),
         pricePerPerson: menu.pricePerPerson,
         minPeople: menu.minPeople,
         maxPeople: menu.maxPeople,
         items: (menu.items || []).map(i => ({ id: undefined as any, name: i.name, description: i.description, price: i.price, category: i.category })),
         restaurant: menu.restaurant,
         isActive: menu.isActive,
-        selectedFoods: menu.selectedFoods || [],
+        isTemplate: false,
+        version: 1,
       } as any);
     } catch (err) {
       console.error('Error duplicating menu', err);
@@ -121,10 +122,16 @@ const Menus = () => {
   };
 
   const handleSubmit = async (data: Omit<Menu, 'id'>) => {
+    const payload: any = {
+      ...data,
+      type: (data.type || 'DINNER').toUpperCase(),
+      isTemplate: false,
+      version: 1,
+    };
     if (editingMenu) {
-      await updateMenu(editingMenu.id, data);
+      await updateMenu(editingMenu.id, payload);
     } else {
-      await createMenu(data);
+      await createMenu(payload);
     }
   };
 

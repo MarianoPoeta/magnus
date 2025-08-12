@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, Search, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -21,6 +21,7 @@ import {
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import { Client } from '../types/Client';
 
 const Clients: React.FC = () => {
@@ -37,35 +38,13 @@ const Clients: React.FC = () => {
     notes: ''
   });
 
-  // Mock clients data - replace with actual store data
-  const [clients] = useState<Client[]>([
-    {
-      id: '1',
-      name: 'Juan Pérez',
-      email: 'juan.perez@email.com',
-      phone: '+54 11 1234-5678',
-      address: 'Av. Corrientes 1234, CABA',
-      company: 'Eventos JP',
-      taxId: '20-12345678-9',
-      notes: 'Cliente VIP, prefiere eventos al aire libre',
-      isActive: true,
-      createdAt: '2024-01-15T10:00:00Z',
-      updatedAt: '2024-01-15T10:00:00Z'
-    },
-    {
-      id: '2',
-      name: 'María González',
-      email: 'maria.gonzalez@email.com',
-      phone: '+54 11 9876-5432',
-      address: 'Callao 567, CABA',
-      company: '',
-      taxId: '',
-      notes: '',
-      isActive: true,
-      createdAt: '2024-02-01T14:30:00Z',
-      updatedAt: '2024-02-01T14:30:00Z'
-    }
-  ]);
+  // Use store-backed clients loaded from backend
+  const clients = useStore(s => s.clients);
+  const { loadClients, createClient, updateClient, deleteClient } = useApi();
+
+  useEffect(() => {
+    loadClients().catch(() => {});
+  }, [loadClients]);
 
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -101,15 +80,31 @@ const Clients: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSave = () => {
-    // TODO: Implement save logic
-    console.log('Saving client:', formData);
+  const handleSave = async () => {
+    const now = new Date().toISOString();
+    const payload: any = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address || undefined,
+      company: formData.company || undefined,
+      taxId: formData.taxId || undefined,
+      notes: formData.notes || undefined,
+      isActive: true,
+      createdAt: editingClient?.createdAt || now,
+      updatedAt: now,
+    };
+
+    if (editingClient) {
+      await updateClient(editingClient.id as any, { ...payload });
+    } else {
+      await createClient(payload);
+    }
     setIsDialogOpen(false);
   };
 
-  const handleDelete = (clientId: string) => {
-    // TODO: Implement delete logic
-    console.log('Deleting client:', clientId);
+  const handleDelete = async (clientId: string) => {
+    await deleteClient(clientId);
   };
 
   const formatDate = (dateString: string) => {

@@ -19,17 +19,25 @@ import { useStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Food } from '../types/Food';
+import FoodItemForm from '../components/FoodItemForm';
+import { useApi } from '../hooks/useApi';
 
 // Foods page for managing food items
 const Foods: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUser, foods, deleteFood } = useStore();
+  const { currentUser, foods, deleteFood, addFood, updateFood } = useStore();
+  const { loadFoodItems, createFoodItem, updateFoodItem, deleteFoodItem } = useApi();
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('name');
   const [showForm, setShowForm] = useState(false);
   const [editingFood, setEditingFood] = useState<Food | null>(null);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    loadFoodItems().finally(() => setIsLoading(false));
+  }, [loadFoodItems]);
 
   // Check admin access
   if (currentUser?.role !== 'admin') {
@@ -63,8 +71,25 @@ const Foods: React.FC = () => {
     setShowForm(true);
   };
 
-  const handleSave = () => {
-    // TODO: Implement save logic
+  const handleSave = async (data: any) => {
+    const payload: any = {
+      name: data.name,
+      description: data.description || undefined,
+      category: (data.category || 'MAIN').toUpperCase(),
+      basePrice: Number(data.price || data.pricePerUnit || 0),
+      guestsPerUnit: Number(data.guestsPerUnit || 1),
+      maxUnits: data.maxUnits ? Number(data.maxUnits) : undefined,
+      allergens: (data.allergens || []).join(',') || undefined,
+      dietaryInfo: (data.dietaryInfo || []).join(',') || undefined,
+      isActive: data.isActive !== false,
+      isTemplate: false,
+    };
+
+    if (editingFood) {
+      await updateFoodItem(editingFood.id as any, payload);
+    } else {
+      await createFoodItem(payload);
+    }
     setShowForm(false);
     setEditingFood(null);
   };
@@ -74,9 +99,9 @@ const Foods: React.FC = () => {
     setEditingFood(null);
   };
 
-  const handleDelete = (foodId: string) => {
+  const handleDelete = async (foodId: string) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta comida?')) {
-      deleteFood(foodId);
+      await deleteFoodItem(foodId);
     }
   };
 
@@ -120,7 +145,14 @@ const Foods: React.FC = () => {
   });
 
   if (showForm) {
-    return <FoodForm food={editingFood} onSave={handleSave} onCancel={handleCancel} />;
+    return (
+      <FoodItemForm
+        isOpen={true}
+        onClose={handleCancel}
+        foodItem={editingFood as any}
+        onSubmit={handleSave}
+      />
+    );
   }
 
   return (
@@ -387,38 +419,6 @@ const Foods: React.FC = () => {
   );
 };
 
-// Placeholder for FoodForm component
-const FoodForm: React.FC<{ food: Food | null; onSave: () => void; onCancel: () => void }> = ({ 
-  food, 
-  onSave, 
-  onCancel 
-}) => {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">
-          {food ? 'Editar Comida' : 'Nueva Comida'}
-        </h1>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button onClick={onSave}>
-            Guardar
-          </Button>
-        </div>
-      </div>
-      
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center py-8">
-            <ChefHat className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-            <p className="text-slate-600">Formulario de comida en desarrollo...</p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
+// Remove placeholder FoodForm component
 
 export default Foods; 

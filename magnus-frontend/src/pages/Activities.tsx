@@ -100,11 +100,12 @@ const Activities = () => {
         basePrice: activity.basePrice,
         duration: activity.duration,
         maxCapacity: activity.maxCapacity,
-        category: activity.category as any,
+        category: (activity.category || 'OUTDOOR').toUpperCase(),
         transportRequired: activity.transportRequired,
-        transportCost: activity.transportCost || 0,
+        transportIncluded: false,
         location: activity.location,
         isActive: activity.isActive,
+        isTemplate: false,
       });
     } catch (err) {
       console.error('Error duplicating activity', err);
@@ -126,10 +127,24 @@ const Activities = () => {
   };
 
   const handleSubmit = async (data: any) => {
+    const payload: any = {
+      name: data.name,
+      description: data.description,
+      basePrice: data.basePrice,
+      duration: data.duration,
+      maxCapacity: data.maxCapacity,
+      category: (data.category || 'OUTDOOR').toUpperCase(),
+      transportRequired: data.transportRequired,
+      transportIncluded: false,
+      location: data.location,
+      isActive: data.isActive,
+      isTemplate: false,
+    };
+
     if (editingActivity) {
-      await updateActivity(editingActivity.id, data);
+      await updateActivity(editingActivity.id, payload);
     } else {
-      await createActivity(data);
+      await createActivity(payload);
     }
   };
 

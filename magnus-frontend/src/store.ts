@@ -2,8 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { User } from './types/User';
 import { Task } from './types/Task';
-import { mockUsers } from './mock/mockUsers';
-import { mockTasks, mockBudgets, mockClients, mockProducts as mockProductsData, mockCookingSchedules } from './mock/mockTasks';
 import { Activity } from './types/Activity';
 import { Accommodation } from './types/Accommodation';
 import { Menu } from './types/Menu';
@@ -12,9 +10,6 @@ import { Product } from './types/Product';
 import { TransportTemplate } from './types/Budget';
 import { Client } from './types/Client';
 import { WorkflowAutomation, WorkflowTrigger } from './services/workflowAutomation';
-import { mockMenus } from './mock/mockMenus';
-import { mockFoodItems } from './mock/mockFoodItems';
-import { mockProducts } from './mock/mockProducts';
 
 // Development flag - set to true to enable session persistence (Vite)
 const isDevelopment = import.meta.env.MODE === 'development';
@@ -135,246 +130,12 @@ export interface StoreState {
   removeToast: (id: string) => void;
 }
 
-// Initial mock data
-const initialClients: Client[] = [
-  {
-    id: 'c1',
-    name: 'Juan Pérez',
-    email: 'juan.perez@email.com',
-    phone: '+54 11 1234-5678',
-    address: 'Av. Corrientes 1234, CABA',
-    company: 'Eventos JP',
-    taxId: '20-12345678-9',
-    notes: 'Cliente VIP, prefiere eventos al aire libre',
-    isActive: true,
-    createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:00:00Z'
-  },
-  {
-    id: 'c2',
-    name: 'María González',
-    email: 'maria.gonzalez@email.com',
-    phone: '+54 11 9876-5432',
-    address: 'Callao 567, CABA',
-    company: '',
-    taxId: '',
-    notes: '',
-    isActive: true,
-    createdAt: '2024-02-01T14:30:00Z',
-    updatedAt: '2024-02-01T14:30:00Z'
-  }
-];
-
-const initialBudgets: Budget[] = [
-  {
-    id: 'b1',
-    name: "Martín's Bachelor Party",
-    clientName: 'Martín',
-    eventType: 'Bachelor Party',
-    activities: ['Go-Karting', 'VIP Club'],
-    status: 'completed',
-    eventDate: '2024-07-13',
-    totalAmount: 3200,
-    mealsAmount: 1000,
-    activitiesAmount: 1000,
-    transportAmount: 200,
-    accommodationAmount: 1000,
-    guestCount: 12,
-    createdAt: '2024-05-01',
-    templateId: '1',
-  },
-  {
-    id: 'b2',
-    name: "Lucas's Bachelor Party",
-    clientName: 'Lucas',
-    eventType: 'Bachelor Party',
-    activities: ['Paintball', 'Brewery Tour'],
-    status: 'pending',
-    eventDate: '2024-08-02',
-    totalAmount: 2500,
-    mealsAmount: 800,
-    activitiesAmount: 800,
-    transportAmount: 100,
-    accommodationAmount: 900,
-    guestCount: 10,
-    createdAt: '2024-05-10',
-    templateId: '1',
-  },
-];
-
-const initialActivities: Activity[] = [
-  {
-    id: '1',
-    name: 'Go-Karting Championship',
-    description: 'High-speed go-kart racing with professional timing and prizes for winners',
-    basePrice: 85,
-    duration: 2,
-    maxCapacity: 20,
-    category: 'adventure',
-    transportRequired: true,
-    transportCost: 25,
-    location: 'SpeedZone Racing',
-    isActive: true,
-  },
-  {
-    id: '2',
-    name: 'Paintball Battle',
-    description: 'Military-style paintball combat with multiple game modes and equipment included',
-    basePrice: 65,
-    duration: 3,
-    maxCapacity: 16,
-    category: 'outdoor',
-    transportRequired: true,
-    transportCost: 30,
-    location: 'Combat Zone',
-    isActive: true,
-  },
-  // ... existing activities ...
-];
-
-const initialAccommodations: Accommodation[] = [
-  {
-    id: 'a1',
-    name: 'Grand Hotel Buenos Aires',
-    address: 'Av. Corrientes 1234, C1043 CABA, Buenos Aires, Argentina',
-    costPerNight: 180, // Cost to company
-    pricePerNight: 250, // Price to client
-    maxCapacity: 4,
-    description: 'Hotel de lujo en el centro de la ciudad con vistas panorámicas',
-    roomType: 'suite',
-    maxOccupancy: 4, // Legacy field
-    amenities: ['WiFi', 'Desayuno', 'Piscina', 'Spa', 'Gimnasio'],
-    location: 'Centro de la Ciudad',
-    rating: 5,
-    isActive: true,
-  },
-  {
-    id: 'a2',
-    name: 'Villa Costera Privada',
-    address: 'Ruta 11 Km 623, B7165 Villa Gesell, Provincia de Buenos Aires, Argentina',
-    costPerNight: 320, // Cost to company
-    pricePerNight: 400, // Price to client
-    maxCapacity: 8,
-    description: 'Villa privada con vista al océano y acceso directo a la playa',
-    roomType: 'villa',
-    maxOccupancy: 8, // Legacy field
-    amenities: ['WiFi', 'Playa Privada', 'Parrilla', 'Jacuzzi', 'Estacionamiento'],
-    location: 'Frente al Mar',
-    rating: 5,
-    isActive: true,
-  },
-  {
-    id: 'a3',
-    name: 'Hostería Boutique Palermo',
-    address: 'Guatemala 4778, C1425 CABA, Buenos Aires, Argentina',
-    costPerNight: 90, // Cost to company
-    pricePerNight: 120, // Price to client
-    maxCapacity: 2,
-    description: 'Hostería boutique en el corazón de Palermo con diseño moderno',
-    roomType: 'double',
-    maxOccupancy: 2, // Legacy field
-    amenities: ['WiFi', 'Desayuno', 'Terraza', 'Bar'],
-    location: 'Palermo',
-    rating: 4,
-    isActive: true,
-  },
-];
-
-const initialProducts: Product[] = [
-  {
-    id: 'p1',
-    name: 'Costillas de Res Premium',
-    category: 'meat',
-    unit: 'kg',
-    cost: 25.00, // Cost for company
-    description: 'Costillas de res premium para asado argentino',
-    estimatedPrice: 25.00, // Legacy field
-    supplier: 'Carnes Premium',
-    notes: 'Pedir con 24h de anticipación',
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: 'p2',
-    name: 'Carbón de Quebracho',
-    category: 'equipment',
-    unit: 'bags',
-    cost: 15.00, // Cost for company
-    description: 'Carbón de quebracho de alta calidad para parrilla',
-    estimatedPrice: 15.00, // Legacy field
-    supplier: 'Suministros BBQ',
-    notes: 'Comprar mínimo 2 bolsas',
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: 'p3',
-    name: 'Vino Tinto Malbec',
-    category: 'beverages',
-    unit: 'bottles',
-    cost: 18.00, // Cost for company
-    description: 'Vino tinto Malbec premium para cena',
-    estimatedPrice: 18.00, // Legacy field
-    supplier: 'Vinos & Licores',
-    notes: 'Comprar 2 botellas por cada 4 personas',
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-];
-
-const initialMenus: Menu[] = mockMenus;
-
-const initialTransportTemplates: TransportTemplate[] = [
-  {
-    id: 't1',
-    name: 'Minivan Ejecutiva Premium',
-    description: 'Minivan de lujo para grupos pequeños con chofer profesional',
-    pricePerGuest: 25, // Price per guest
-    costToCompany: 180, // Cost to company  
-    type: 'minivan',
-    capacity: 8,
-    vehicleType: 'minivan', // Legacy field
-    pricePerHour: 45, // Legacy field
-    pricePerKm: 2.5,
-    includesDriver: true,
-  },
-  {
-    id: 't2',
-    name: 'Bus Turístico Confort',
-    description: 'Bus espacioso y cómodo para grupos grandes con aire acondicionado',
-    pricePerGuest: 15, // Price per guest
-    costToCompany: 300, // Cost to company
-    type: 'bus',
-    capacity: 25,
-    vehicleType: 'bus', // Legacy field
-    pricePerHour: 80, // Legacy field
-    pricePerKm: 3.0,
-    includesDriver: true,
-  },
-  {
-    id: 't3',
-    name: 'Limousina Premium VIP',
-    description: 'Limousina de lujo para eventos especiales con champagne incluido',
-    pricePerGuest: 45, // Price per guest
-    costToCompany: 240, // Cost to company
-    type: 'limousine',
-    capacity: 6,
-    vehicleType: 'limousine', // Legacy field
-    pricePerHour: 120, // Legacy field
-    pricePerKm: 5.0,
-    includesDriver: true,
-  },
-];
-
 // Enhanced store with better persistence and error handling
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
       // User Management
-      users: mockUsers,
+      users: [],
       currentUser: null,
       setCurrentUser: (user: User | null) => {
         set({ currentUser: user });
@@ -389,7 +150,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Client Management
-      clients: mockClients,
+      clients: [],
       setClients: (clients: Client[]) => set({ clients }),
       addClient: (client: Client) => {
         set((state) => ({ clients: [...state.clients, client] }));
@@ -441,7 +202,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Tasks Management
-      tasks: mockTasks,
+      tasks: [],
       setTasks: (tasks: Task[]) => set({ tasks }),
       updateTask: (task: Task) => {
         set((state) => ({
@@ -458,7 +219,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Budget Management
-      budgets: mockBudgets,
+      budgets: [],
       setBudgets: (budgets: Budget[]) => set({ budgets }),
       addBudget: (budget: Budget) => {
         set((state) => ({ budgets: [...state.budgets, budget] }));
@@ -517,7 +278,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Activity Management
-      activities: initialActivities,
+      activities: [],
       setActivities: (activities: Activity[]) => set({ activities }),
       addActivity: (activity: Activity) => {
         set((state) => ({ activities: [...state.activities, activity] }));
@@ -534,7 +295,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Accommodation Management
-      accommodations: initialAccommodations,
+      accommodations: [],
       setAccommodations: (accommodations: Accommodation[]) => set({ accommodations }),
       addAccommodation: (accommodation: Accommodation) => {
         set((state) => ({ accommodations: [...state.accommodations, accommodation] }));
@@ -551,7 +312,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Menu Management
-      menus: initialMenus,
+      menus: [],
       setMenus: (menus: Menu[]) => set({ menus }),
       addMenu: (menu: Menu) => {
         set((state) => ({ menus: [...state.menus, menu] }));
@@ -568,7 +329,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Food Management
-      foods: mockFoodItems,
+      foods: [],
       setFoods: (foods: Food[]) => set({ foods }),
       addFood: (food: Food) => {
         set((state) => ({ foods: [...state.foods, food] }));
@@ -585,7 +346,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Product Management
-      products: mockProductsData,
+      products: [],
       setProducts: (products: Product[]) => set({ products }),
       addProduct: (product: Product) => {
         set((state) => ({ products: [...state.products, product] }));
@@ -602,7 +363,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Transport Template Management
-      transportTemplates: initialTransportTemplates,
+      transportTemplates: [],
       setTransportTemplates: (templates: TransportTemplate[]) => set({ transportTemplates: templates }),
       addTransportTemplate: (template: TransportTemplate) => {
         set((state) => ({ transportTemplates: [...state.transportTemplates, template] }));
