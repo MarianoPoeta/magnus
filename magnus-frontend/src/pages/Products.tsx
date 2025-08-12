@@ -21,10 +21,12 @@ import { useStore } from '../store';
 import ProductForm from '../components/ProductForm';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Product } from '../types/Product';
+import { useApi } from '../hooks/useApi';
 
 const Products: React.FC = () => {
   const navigate = useNavigate();
-  const { products, addProduct, updateProduct, deleteProduct } = useStore();
+  const { products, addProduct, updateProduct, deleteProduct, setProducts } = useStore();
+  const { loadProducts, createProduct, updateProduct: apiUpdateProduct, deleteProduct: apiDeleteProduct } = useApi();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
@@ -40,6 +42,10 @@ const Products: React.FC = () => {
     supplier: '',
     notes: ''
   });
+
+  React.useEffect(() => {
+    loadProducts().catch(() => {});
+  }, [loadProducts]);
 
   const categories = ['meat', 'vegetables', 'beverages', 'condiments', 'equipment', 'decorations', 'other'];
   const units = ['kg', 'units', 'liters', 'pieces', 'boxes', 'bags', 'bottles'];
@@ -72,22 +78,21 @@ const Products: React.FC = () => {
     });
   };
 
-  const handleSave = () => {
-    const productData = {
-      ...formData,
-      id: editingProduct?.id || `p${Date.now()}`,
-      cost: formData.estimatedPrice, // Map estimatedPrice to required cost field
+  const handleSave = async () => {
+    const payload: any = {
+      name: formData.name,
+      description: formData.description || undefined,
+      category: (formData.category || 'OTHER').toUpperCase(),
+      unit: (formData.unit || 'UNITS').toUpperCase(),
+      pricePerUnit: Number(formData.estimatedPrice || 0),
+      supplier: formData.supplier || undefined,
       isActive: true,
-      createdAt: editingProduct?.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      category: formData.category as 'meat' | 'vegetables' | 'beverages' | 'condiments' | 'equipment' | 'decorations' | 'other',
-      unit: formData.unit as 'kg' | 'units' | 'liters' | 'pieces' | 'boxes' | 'bags' | 'bottles'
     };
 
     if (editingProduct) {
-      updateProduct(productData);
+      await apiUpdateProduct(editingProduct.id as any, payload);
     } else {
-      addProduct(productData);
+      await createProduct(payload);
     }
 
     setIsCreating(false);
@@ -117,9 +122,9 @@ const Products: React.FC = () => {
     });
   };
 
-  const handleDelete = (productId: string) => {
+  const handleDelete = async (productId: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      deleteProduct(productId);
+      await apiDeleteProduct(productId as any);
     }
   };
 

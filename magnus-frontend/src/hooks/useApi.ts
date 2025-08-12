@@ -559,6 +559,134 @@ export const useApi = () => {
     }
   }, [handleError, clearError]);
 
+  // Client Management
+  const loadClients = useCallback(async (params?: any) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const response = await apiServices.clients.getClients(params);
+      store.setClients(response.data);
+      return response;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const createClient = useCallback(async (clientData: any) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const response = await apiServices.clients.createClient(clientData);
+      store.addClient(response as any);
+      return response;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const updateClient = useCallback(async (id: string, clientData: any) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const response = await apiServices.clients.updateClient({ ...clientData, id });
+      store.updateClient(response as any);
+      return response;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const deleteClient = useCallback(async (id: string) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      await apiServices.clients.deleteClient(id as any);
+      store.deleteClient(id);
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  // Food Items
+  const loadFoodItems = useCallback(async () => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const items = await apiServices.foodItems.getFoodItems();
+      store.setFoods(items as any);
+      return items;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const createFoodItem = useCallback(async (foodData: any) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const response = await apiServices.foodItems.createFoodItem(foodData);
+      store.addFood(response as any);
+      return response;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const updateFoodItem = useCallback(async (id: string, foodData: any) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      const response = await apiServices.foodItems.updateFoodItem({ ...foodData, id });
+      store.updateFood(response as any);
+      return response;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const deleteFoodItem = useCallback(async (id: string) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      await apiServices.foodItems.deleteFoodItem(id as any);
+      store.deleteFood(id);
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
   // Initialize data on mount
   useEffect(() => {
     const initializeData = async () => {
@@ -590,6 +718,8 @@ export const useApi = () => {
             loadTransports(),
             loadTasks(),
             loadNotifications(),
+            loadClients(),
+            loadFoodItems(),
           ]);
         }
       } catch (error) {
@@ -598,7 +728,7 @@ export const useApi = () => {
     };
 
     initializeData();
-  }, [loadBudgets, loadActivities, loadAccommodations, loadMenus, loadProducts, loadTransports, loadTasks, loadNotifications, store.currentUser]);
+  }, [loadBudgets, loadActivities, loadAccommodations, loadMenus, loadProducts, loadTransports, loadTasks, loadNotifications, loadClients, loadFoodItems, store.currentUser]);
 
   return {
     // State
@@ -652,6 +782,18 @@ export const useApi = () => {
     updateTask,
     deleteTask,
     
+    // Client Management
+    loadClients,
+    createClient,
+    updateClient,
+    deleteClient,
+
+    // Food Items
+    loadFoodItems,
+    createFoodItem,
+    updateFoodItem,
+    deleteFoodItem,
+
     // Notification Management
     loadNotifications,
     markNotificationAsRead,
