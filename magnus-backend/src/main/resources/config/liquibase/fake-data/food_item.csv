@@ -1,0 +1,11 @@
+id;name;description;category;base_price;base_cost;serving_size;guests_per_unit;max_units;allergens;dietary_info;is_active;is_template;created_at;updated_at
+1;realistic intermix nice;../fake-data/blob/hipster.txt;MAIN;20985.29;29667.36;over moisten;15006;32451;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;false;2025-07-07T21:00:11;2025-07-07T17:49:38
+2;plus;../fake-data/blob/hipster.txt;SPECIAL;299.44;10545.37;unlined before ack;20667;25064;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;false;2025-07-08T14:43:12;2025-07-08T01:47:20
+3;promptly seafood;../fake-data/blob/hipster.txt;BEVERAGE;7479.05;26793.35;foot;9627;32396;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;false;2025-07-08T09:05:46;2025-07-08T04:41:12
+4;beside;../fake-data/blob/hipster.txt;APPETIZER;6278.07;28757.57;broadly unaccountably;23031;5962;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;true;2025-07-07T16:44:03;2025-07-08T14:26:20
+5;subtract cripple even;../fake-data/blob/hipster.txt;APPETIZER;31623.86;14929.05;thorough;18919;2557;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;true;2025-07-08T00:50:12;2025-07-08T05:40:34
+6;vice;../fake-data/blob/hipster.txt;SPECIAL;4908.11;4973.55;exterior lest or;14818;18599;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;false;2025-07-07T17:54:39;2025-07-07T21:11:20
+7;spear defiantly whoa;../fake-data/blob/hipster.txt;SPECIAL;12635.89;15071.9;papa ah;5984;28759;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;true;2025-07-07T16:16:16;2025-07-08T11:00:02
+8;hospitable;../fake-data/blob/hipster.txt;DESSERT;24068.82;19387.53;bus besides sashay;28420;10472;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;true;2025-07-08T03:38:11;2025-07-08T07:19:17
+9;limping;../fake-data/blob/hipster.txt;APPETIZER;26574.41;30563;ownership brr pfft;29124;21567;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;false;2025-07-07T20:17:10;2025-07-08T08:21:59
+10;ha emergent wherever;../fake-data/blob/hipster.txt;MAIN;30594.31;12657.88;confiscate;16746;30827;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;false;2025-07-08T08:24:02;2025-07-08T01:54:42

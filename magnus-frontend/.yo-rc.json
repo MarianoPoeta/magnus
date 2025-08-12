@@ -1,0 +1,27 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "magnus",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "no",
+    "devDatabaseType": "mysql",
+    "dtoSuffix": "DTO",
+    "enableGradleEnterprise": false,
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": true,
+    "enableTranslation": true,
+    "entities": [],
+    "jhiPrefix": "pb",
+    "jhipsterVersion": "8.11.0",
+    "languages": ["en", "es"],
+    "nativeLanguage": "es",
+    "packageName": "com.magnus",
+    "prodDatabaseType": "mysql",
+    "reactive": false,
+    "serverPort": "8080",
+    "testFrameworks": ["cypress", "junit"],
+    "websocket": "spring-websocket"
+  }
+}

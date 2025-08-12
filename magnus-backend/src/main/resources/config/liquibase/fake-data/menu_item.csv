@@ -1,0 +1,11 @@
+id;name;description;category;price;cost;allergens;dietary_info;preparation_time;is_active;created_at;updated_at;menu_id
+1;forenenst;../fake-data/blob/hipster.txt;APPETIZER;641.8;16024.44;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;6013;true;2025-07-08T04:57:46;2025-07-07T16:26:22;1
+2;abandoned;../fake-data/blob/hipster.txt;DESSERT;8138.22;15203.4;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;18457;false;2025-07-08T09:21:17;2025-07-07T16:03:11;2
+3;as psst unto;../fake-data/blob/hipster.txt;SPECIAL;15182.15;7454.76;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;7024;true;2025-07-07T20:31:08;2025-07-07T22:49:21;3
+4;psst obnoxiously;../fake-data/blob/hipster.txt;MAIN;16728.63;16183.98;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;21769;false;2025-07-08T09:20:19;2025-07-07T22:37:58;4
+5;upon outrank abaft;../fake-data/blob/hipster.txt;MAIN;20901.53;25747.52;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;16007;false;2025-07-08T11:35:35;2025-07-08T06:34:35;5
+6;pulverize zowie;../fake-data/blob/hipster.txt;SPECIAL;21312.13;19380.32;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2193;true;2025-07-08T03:24:27;2025-07-08T13:56:12;6
+7;oddly interesting horn;../fake-data/blob/hipster.txt;APPETIZER;11602.96;7987.45;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;17799;false;2025-07-08T05:45:10;2025-07-08T01:37:59;7
+8;around lovingly;../fake-data/blob/hipster.txt;DESSERT;1409.55;13094.9;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;8242;false;2025-07-07T21:45:48;2025-07-07T15:14:34;8
+9;even under;../fake-data/blob/hipster.txt;SPECIAL;1806.46;21318.18;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;3310;true;2025-07-08T10:22:44;2025-07-08T02:53:59;9
+10;stump object down;../fake-data/blob/hipster.txt;SPECIAL;7612.29;3032.13;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;6712;true;2025-07-08T13:28:04;2025-07-07T23:34:37;10

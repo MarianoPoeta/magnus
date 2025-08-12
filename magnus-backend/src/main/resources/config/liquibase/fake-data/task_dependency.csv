@@ -1,0 +1,11 @@
+id;dependency_type;notes;is_active;created_at;prerequisite_task_id;dependent_task_id
+1;BLOCKS;finally;true;2025-07-08T07:07:57;1;1
+2;SUGGESTS;pish;false;2025-07-08T00:39:12;2;2
+3;SUGGESTS;tinted quirkily;true;2025-07-08T13:13:12;3;3
+4;REQUIRES;request;false;2025-07-07T16:33:38;4;4
+5;REQUIRES;submitter simple;true;2025-07-08T12:33:47;5;5
+6;SUGGESTS;optimistically;true;2025-07-08T11:00:10;6;6
+7;SUGGESTS;fooey partially without;false;2025-07-08T00:20:57;7;7
+8;REQUIRES;nucleotidase;true;2025-07-08T01:11:55;8;8
+9;SUGGESTS;desecrate deliberately;false;2025-07-07T20:28:35;9;9
+10;SUGGESTS;um courageously meh;true;2025-07-07T17:45:42;10;10

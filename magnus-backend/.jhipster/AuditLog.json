@@ -1,0 +1,86 @@
+{
+  "annotations": {
+    "changelogDate": "20250708151623"
+  },
+  "applications": ["magnus"],
+  "documentation": "Comprehensive audit trail",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "entityType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "entityId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "action",
+      "fieldType": "AuditAction",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CREATE (Entity created),UPDATE (Entity updated),DELETE (Entity deleted),STATUS_CHANGE (Status changed),APPROVE (Entity approved),REJECT (Entity rejected)"
+    },
+    {
+      "fieldName": "oldValue",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "newValue",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "fieldName",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "userId",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "userRole",
+      "fieldType": "UserRole",
+      "fieldValues": "ADMIN (Full system access),SALES (Budget creation and client management),LOGISTICS (Task management and shopping coordination),COOK (Cooking schedules and ingredient management)"
+    },
+    {
+      "fieldName": "timestamp",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ipAddress",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "45"
+    },
+    {
+      "fieldName": "userAgent",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "sessionId",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    }
+  ],
+  "name": "AuditLog",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "appUser",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

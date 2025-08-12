@@ -1,0 +1,11 @@
+id;event_date;cooking_time;meal_type;menu_name;guest_count;special_instructions;is_completed;completed_at;ingredients_ready;estimated_duration;actual_duration;started_at;version;conflict_status;last_modified_by;created_at;updated_at;budget_id
+1;2025-07-08;00:10:00;BREAKFAST;inject aha fen;22652;../fake-data/blob/hipster.txt;false;2025-07-07T18:38:39;true;18535;29664;2025-07-07T21:46:39;30608;RESOLVED;zowie;2025-07-08T02:24:39;2025-07-07T23:02:40;1
+2;2025-07-07;05:17:00;DINNER;presell angle fooey;24821;../fake-data/blob/hipster.txt;true;2025-07-07T19:53:24;true;32762;15072;2025-07-08T11:00:36;5753;ESCALATED;around;2025-07-08T01:58:15;2025-07-08T06:20:06;2
+3;2025-07-07;06:48:00;SNACK;tray separate heavy;19368;../fake-data/blob/hipster.txt;true;2025-07-08T01:34:40;false;27027;14557;2025-07-08T08:25:58;17829;RESOLVED;brilliant;2025-07-07T22:33:35;2025-07-08T14:21:21;3
+4;2025-07-08;18:33:00;SNACK;yet black;30367;../fake-data/blob/hipster.txt;true;2025-07-08T12:05:33;true;30673;30261;2025-07-08T14:58:07;3256;DETECTED;whether fixed;2025-07-08T11:00:21;2025-07-07T16:49:47;4
+5;2025-07-08;07:49:00;DINNER;off;21234;../fake-data/blob/hipster.txt;false;2025-07-08T13:05:00;false;11534;23784;2025-07-08T05:19:59;27858;NONE;slimy;2025-07-07T18:16:19;2025-07-08T01:05:55;5
+6;2025-07-08;20:24:00;BREAKFAST;under;27074;../fake-data/blob/hipster.txt;false;2025-07-07T15:46:44;true;12452;17810;2025-07-07T21:38:53;5130;NONE;brr;2025-07-07T18:02:53;2025-07-08T10:25:44;6
+7;2025-07-08;12:42:00;BREAKFAST;frilly fatherly zowie;1869;../fake-data/blob/hipster.txt;true;2025-07-08T06:41:32;false;14429;30089;2025-07-08T07:11:13;22609;RESOLVED;CD off afore;2025-07-07T16:14:32;2025-07-08T04:16:03;7
+8;2025-07-07;07:12:00;SNACK;amidst;15256;../fake-data/blob/hipster.txt;true;2025-07-08T12:37:01;false;24894;5788;2025-07-07T20:31:46;20899;NONE;yum;2025-07-08T02:06:43;2025-07-08T06:03:48;8
+9;2025-07-08;21:48:00;SNACK;outside;24780;../fake-data/blob/hipster.txt;false;2025-07-08T07:29:08;true;1467;6250;2025-07-07T18:42:31;11545;DETECTED;considerate times;2025-07-08T11:36:20;2025-07-08T12:39:01;9
+10;2025-07-08;08:01:00;DINNER;pointed;1969;../fake-data/blob/hipster.txt;true;2025-07-08T11:44:48;false;28124;6337;2025-07-08T09:02:58;18417;DETECTED;staid;2025-07-07T22:10:07;2025-07-07T21:17:46;10

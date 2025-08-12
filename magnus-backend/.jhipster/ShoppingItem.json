@@ -1,0 +1,150 @@
+{
+  "annotations": {
+    "changelogDate": "20250708150123"
+  },
+  "applications": ["magnus"],
+  "documentation": "Weekly consolidated shopping lists",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "productName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "totalQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "unit",
+      "fieldType": "ProductUnit",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "KG (Kilograms),G (Grams),LITERS (Liters),ML (Milliliters),UNITS (Individual units),PIECES (Pieces),BOXES (Boxes),BAGS (Bags),BOTTLES (Bottles),BUNCHES (Bunches),LEAVES (Leaves),SLICES (Slices)"
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "ProductCategory",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MEAT (Meat products),VEGETABLES (Vegetables and produce),BEVERAGES (Drinks and beverages),CONDIMENTS (Seasonings and condiments),EQUIPMENT (Equipment and tools),DECORATIONS (Decorative items),SUPPLIES (General supplies),OTHER (Other products)"
+    },
+    {
+      "fieldName": "budgetIds",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "clientNames",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isPurchased",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "purchasedQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "weekStart",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "weekEnd",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "supplier",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "supplierContact",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "estimatedCost",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "actualCost",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "deliveryDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isConsolidated",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "consolidatedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "purchasedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "conflictStatus",
+      "fieldType": "ConflictStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NONE (No conflicts),DETECTED (Conflict detected),RESOLVED (Conflict resolved),ESCALATED (Conflict escalated)"
+    },
+    {
+      "fieldName": "version",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "ShoppingItem",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "appUser",
+      "otherEntityRelationshipName": "purchasedItems",
+      "relationshipName": "purchasedBy",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "weeklyPlan",
+      "relationshipName": "weeklyPlan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

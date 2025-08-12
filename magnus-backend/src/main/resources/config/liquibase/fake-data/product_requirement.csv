@@ -1,0 +1,11 @@
+id;quantity;unit;notes;estimated_cost;actual_cost;is_purchased;purchased_by;purchased_at;version;conflict_status;created_at;updated_at;product_id
+1;19772.3;KG;../fake-data/blob/hipster.txt;31729.85;725.32;true;far-flung row;2025-07-08T09:14:30;1233;NONE;2025-07-07T18:41:34;2025-07-07T20:15:09;1
+2;31432.01;BOTTLES;../fake-data/blob/hipster.txt;19698.82;32018.93;false;throughout whose;2025-07-07T17:07:52;19811;DETECTED;2025-07-08T02:42:36;2025-07-07T18:38:50;2
+3;28493.45;SLICES;../fake-data/blob/hipster.txt;28971.05;12635.2;true;finally during;2025-07-08T12:35:49;22484;RESOLVED;2025-07-07T21:49:51;2025-07-08T02:39:59;3
+4;24847.35;PIECES;../fake-data/blob/hipster.txt;5703.21;23591.39;false;rebuke athwart plagiarise;2025-07-08T03:58:10;9860;NONE;2025-07-08T03:11:24;2025-07-08T10:38:46;4
+5;16803.49;BOXES;../fake-data/blob/hipster.txt;9980.63;28650.58;true;blah reconsideration;2025-07-07T22:53:45;16908;RESOLVED;2025-07-07T23:22:06;2025-07-08T01:47:36;5
+6;2296.98;BOXES;../fake-data/blob/hipster.txt;23529.92;25023.58;true;merrily;2025-07-08T01:37:07;29366;DETECTED;2025-07-07T23:27:51;2025-07-08T03:29:05;6
+7;25488.78;BUNCHES;../fake-data/blob/hipster.txt;28464.11;22536.96;false;oh;2025-07-08T13:50:43;28180;RESOLVED;2025-07-07T22:38:18;2025-07-08T13:53:06;7
+8;15762.77;BUNCHES;../fake-data/blob/hipster.txt;32356.26;843.85;false;likewise brief;2025-07-08T00:05:06;8784;DETECTED;2025-07-08T11:53:12;2025-07-08T08:55:36;8
+9;2975.08;LEAVES;../fake-data/blob/hipster.txt;30239.7;28677.97;true;in;2025-07-07T21:18:11;8637;RESOLVED;2025-07-07T21:13:11;2025-07-07T22:42:47;9
+10;14778.53;PIECES;../fake-data/blob/hipster.txt;5550;19642.94;true;although sticker prestigious;2025-07-08T02:37:57;14263;NONE;2025-07-08T13:00:40;2025-07-08T01:36:12;10

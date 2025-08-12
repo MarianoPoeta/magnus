@@ -1,0 +1,18 @@
+{
+  "generator-jhipster": {
+    "deploymentType": "docker-compose",
+    "appsFolders": [
+      "magnus"
+    ],
+    "directoryPath": "../",
+    "gatewayType": "no",
+    "kubernetesServiceType": "LoadBalancer",
+    "ingressDomain": "magnus.local",
+    "monitoring": "prometheus",
+    "clusteredDbApps": [],
+    "serviceDiscoveryType": "no",
+    "dockerRepositoryName": "magnus",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "magnus"
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "annotations": {
+    "changelogDate": "20250708150223"
+  },
+  "applications": ["magnus"],
+  "documentation": "Cooking schedules with ingredient management",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "eventDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cookingTime",
+      "fieldType": "LocalTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "mealType",
+      "fieldType": "MealType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "BREAKFAST (Morning meal),LUNCH (Midday meal),DINNER (Evening meal),SNACK (Light meal)"
+    },
+    {
+      "fieldName": "menuName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "guestCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "specialInstructions",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isCompleted",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "completedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "ingredientsReady",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estimatedDuration",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "actualDuration",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "startedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "version",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "conflictStatus",
+      "fieldType": "ConflictStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NONE (No conflicts),DETECTED (Conflict detected),RESOLVED (Conflict resolved),ESCALATED (Conflict escalated)"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "CookingSchedule",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "task",
+      "relationshipName": "relatedTask",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "cookingIngredient",
+      "otherEntityRelationshipName": "cookingSchedule",
+      "relationshipName": "cookingIngredient",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "budget",
+      "relationshipName": "budget",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

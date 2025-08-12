@@ -1,0 +1,11 @@
+id;week_start;week_end;plan_name;status;total_budgets;total_guests;estimated_cost;actual_cost;notes;is_consolidated;consolidated_at;created_at;updated_at;created_by_id
+1;2025-07-07;2025-07-07;whoa inasmuch;ARCHIVED;687;5025;20894.04;4357.82;../fake-data/blob/hipster.txt;false;2025-07-07T15:41:17;2025-07-08T06:41:20;2025-07-07T15:40:28;1
+2;2025-07-08;2025-07-08;per inasmuch;IN_PROGRESS;12212;32377;29604.28;13473.65;../fake-data/blob/hipster.txt;false;2025-07-08T09:29:08;2025-07-08T04:45:07;2025-07-08T07:18:20;2
+3;2025-07-08;2025-07-08;mothball fill annual;IN_PROGRESS;26121;5652;10523.38;3954.41;../fake-data/blob/hipster.txt;false;2025-07-07T18:32:49;2025-07-08T01:32:00;2025-07-07T18:08:26;3
+4;2025-07-08;2025-07-07;obediently enchanted hose;COMPLETED;2126;13539;22308.38;27318.1;../fake-data/blob/hipster.txt;false;2025-07-08T02:07:25;2025-07-08T00:03:26;2025-07-08T03:53:47;4
+5;2025-07-08;2025-07-07;once;DRAFT;2130;1047;5254.3;13960.16;../fake-data/blob/hipster.txt;false;2025-07-07T23:03:40;2025-07-08T13:28:24;2025-07-08T13:52:33;5
+6;2025-07-08;2025-07-07;gee definitive duh;COMPLETED;3347;24968;22884.5;4321.91;../fake-data/blob/hipster.txt;true;2025-07-08T05:13:00;2025-07-08T07:50:57;2025-07-08T08:41:30;6
+7;2025-07-08;2025-07-07;meanwhile of negotiation;ARCHIVED;3799;10783;4233.39;1695.18;../fake-data/blob/hipster.txt;false;2025-07-08T00:45:29;2025-07-08T12:46:21;2025-07-08T14:23:46;7
+8;2025-07-08;2025-07-08;provided officially spirit;ARCHIVED;14829;19957;19636.06;7196.9;../fake-data/blob/hipster.txt;false;2025-07-08T11:46:58;2025-07-08T00:22:07;2025-07-08T01:29:42;8
+9;2025-07-07;2025-07-08;unfortunately supposing;DRAFT;23262;4984;22880.75;13364.12;../fake-data/blob/hipster.txt;false;2025-07-07T23:16:07;2025-07-08T03:39:50;2025-07-08T09:56:02;9
+10;2025-07-08;2025-07-08;once membership entice;DRAFT;25900;2708;29422.19;4780.64;../fake-data/blob/hipster.txt;false;2025-07-08T11:40:08;2025-07-08T11:09:01;2025-07-08T08:49:16;10

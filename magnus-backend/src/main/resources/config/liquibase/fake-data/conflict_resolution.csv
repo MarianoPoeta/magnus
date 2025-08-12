@@ -1,0 +1,11 @@
+id;entity_type;entity_id;field_name;local_value;remote_value;resolved_value;resolution_strategy;is_resolved;resolved_at;conflict_detected_at;created_at
+1;qua rowdy fathom;psst ew ugh;fedora;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;majority sport;true;2025-07-08T13:47:40;2025-07-08T12:14:54;2025-07-07T22:24:58
+2;ugh ew hourly;deploy;duffel gratefully;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;corral contrail;false;2025-07-07T17:45:15;2025-07-08T08:09:15;2025-07-08T04:14:24
+3;muddy at meh;relative up so;clone ugh;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;splosh coliseum poorly;true;2025-07-08T10:49:45;2025-07-08T13:16:58;2025-07-07T23:31:52
+4;presume oh french;decongestant fooey if;mild sentimental beneath;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;timely;false;2025-07-08T00:59:54;2025-07-08T05:28:27;2025-07-07T16:15:06
+5;unfortunately;correctly now;blond;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;zen endow;false;2025-07-07T22:52:07;2025-07-07T22:00:56;2025-07-07T19:42:04
+6;spork insistent;with;yowza soupy roundabout;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;reword amid;true;2025-07-08T08:47:05;2025-07-08T03:26:36;2025-07-07T18:27:36
+7;athwart oh;basket across vainly;aboard;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;characterization;true;2025-07-08T03:35:59;2025-07-07T19:02:25;2025-07-08T09:01:51
+8;more;furthermore;lox satisfy;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;upward gadzooks;false;2025-07-08T12:34:28;2025-07-08T03:02:38;2025-07-08T03:52:38
+9;recompense feather ferret;instantly dark peony;hmph oh yippee;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;bench vice;true;2025-07-08T09:08:22;2025-07-08T10:29:46;2025-07-07T21:32:43
+10;when despite;meh;bah pace doubtfully;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;lieu below royal;true;2025-07-08T14:02:50;2025-07-08T06:04:28;2025-07-08T09:55:22

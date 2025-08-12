@@ -1,0 +1,22 @@
+{
+  "generator-jhipster": {
+    "deploymentType": "kubernetes",
+    "appsFolders": [
+      "magnus"
+    ],
+    "directoryPath": "../",
+    "kubernetesServiceType": "LoadBalancer",
+    "istio": true,
+    "ingressDomain": "magnus.local",
+    "monitoring": "prometheus",
+    "clusteredDbApps": [
+      "magnus"
+    ],
+    "serviceDiscoveryType": "eureka",
+    "dockerRepositoryName": "magnus",
+    "dockerPushCommand": "docker push",
+    "kubernetesNamespace": "magnus",
+    "kubernetesUseDynamicStorage": false,
+    "kubernetesStorageClassName": ""
+  }
+}

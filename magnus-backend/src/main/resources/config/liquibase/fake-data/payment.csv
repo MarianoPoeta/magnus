@@ -1,0 +1,11 @@
+id;method;amount;payment_date;reference;notes;is_confirmed;confirmation_number;created_at;updated_at;budget_id
+1;CHECK;20010.34;2025-07-08;as weary inwardly;../fake-data/blob/hipster.txt;true;uh-huh;2025-07-07T22:52:20;2025-07-07T23:50:56;1
+2;BANK_TRANSFER;27335.31;2025-07-07;huzzah overheard besides;../fake-data/blob/hipster.txt;false;evince leap mosh;2025-07-08T09:55:10;2025-07-07T20:51:25;2
+3;CREDIT_CARD;7616.37;2025-07-08;provided how accompanist;../fake-data/blob/hipster.txt;true;ugh;2025-07-08T02:21:47;2025-07-08T10:26:08;3
+4;CASH;13849.9;2025-07-08;descent;../fake-data/blob/hipster.txt;true;ownership;2025-07-08T07:25:20;2025-07-08T08:52:12;4
+5;CASH;11860.7;2025-07-07;worth afore;../fake-data/blob/hipster.txt;true;nifty tackle ceramic;2025-07-08T02:09:23;2025-07-07T19:05:16;5
+6;CHECK;908.06;2025-07-08;dead each harmful;../fake-data/blob/hipster.txt;false;into;2025-07-08T12:32:02;2025-07-07T18:33:58;6
+7;OTHER;25662.29;2025-07-07;and psst;../fake-data/blob/hipster.txt;false;behind shakily enhance;2025-07-08T05:49:54;2025-07-07T17:13:34;7
+8;CHECK;20861.17;2025-07-08;intently;../fake-data/blob/hipster.txt;true;ah;2025-07-07T19:54:49;2025-07-07T16:17:06;8
+9;CASH;22497.15;2025-07-08;ha comb;../fake-data/blob/hipster.txt;false;coarse near switchboard;2025-07-08T12:05:38;2025-07-07T17:10:10;9
+10;BANK_TRANSFER;31036.4;2025-07-08;so;../fake-data/blob/hipster.txt;true;agreement;2025-07-07T16:15:26;2025-07-07T23:35:56;10

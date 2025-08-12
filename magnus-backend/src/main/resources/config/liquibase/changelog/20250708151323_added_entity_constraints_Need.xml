@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Need.
+    -->
+    <changeSet id="20250708151323-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="requested_by_id"
+                                 baseTableName="need"
+                                 constraintName="fk_need__requested_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="fulfilled_by_id"
+                                 baseTableName="need"
+                                 constraintName="fk_need__fulfilled_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="parent_task_id"
+                                 baseTableName="need"
+                                 constraintName="fk_need__parent_task_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="task"
+                                 />
+    </changeSet>
+</databaseChangeLog>

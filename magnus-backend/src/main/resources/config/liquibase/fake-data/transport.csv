@@ -1,0 +1,11 @@
+id;name;description;vehicle_type;capacity;price_per_hour;price_per_km;cost_per_hour;cost_per_km;includes_driver;driver_cost;fuel_type;contact_info;is_active;is_template;created_at;updated_at
+1;roger;../fake-data/blob/hipster.txt;BUS;19965;31241.08;30586.1;12251.49;31679.35;true;22759.72;off council;../fake-data/blob/hipster.txt;true;true;2025-07-08T03:23:30;2025-07-07T17:18:20
+2;far-flung;../fake-data/blob/hipster.txt;LIMOUSINE;6611;25468.31;28212.04;1293.19;21509.98;true;14334.57;huzzah accentuate;../fake-data/blob/hipster.txt;true;true;2025-07-07T23:54:02;2025-07-08T08:32:31
+3;unless after;../fake-data/blob/hipster.txt;BUS;6821;16824.02;25893.64;3247.48;5368.05;true;1794.67;that equally;../fake-data/blob/hipster.txt;true;false;2025-07-08T08:35:04;2025-07-08T05:46:35
+4;or;../fake-data/blob/hipster.txt;CAR;20385;17847.96;23829.08;29011.3;26795;true;25261.91;roundabout playfully vibration;../fake-data/blob/hipster.txt;false;true;2025-07-07T16:36:03;2025-07-08T05:49:35
+5;ethyl beside;../fake-data/blob/hipster.txt;BUS;25036;18076.21;28918.09;15168.49;10127.86;true;26586.08;porter about;../fake-data/blob/hipster.txt;true;false;2025-07-08T03:10:41;2025-07-08T06:21:33
+6;phooey;../fake-data/blob/hipster.txt;BUS;29492;11307.51;14993.19;14856.47;6786.29;false;30808.75;slope;../fake-data/blob/hipster.txt;false;true;2025-07-07T15:58:06;2025-07-08T07:08:06
+7;youthfully;../fake-data/blob/hipster.txt;CAR;6099;17973.92;7392.96;19853.61;20106.27;true;32010.58;pro for controvert;../fake-data/blob/hipster.txt;true;false;2025-07-08T05:15:34;2025-07-08T11:48:29
+8;ghost provided epic;../fake-data/blob/hipster.txt;MOTORCYCLE;6051;5581.12;28306.7;25315.13;21716.12;false;12237.05;duh comparison while;../fake-data/blob/hipster.txt;true;false;2025-07-07T19:24:32;2025-07-07T23:59:02
+9;towards limply including;../fake-data/blob/hipster.txt;BUS;10954;29437.27;17819.56;1942.64;26500.1;true;12196.45;why mechanically;../fake-data/blob/hipster.txt;true;true;2025-07-08T08:56:15;2025-07-08T10:05:53
+10;fuss overconfidently custody;../fake-data/blob/hipster.txt;LIMOUSINE;4779;5970.54;5684.01;21597.27;29429.1;false;24326.91;mispronounce;../fake-data/blob/hipster.txt;false;true;2025-07-07T17:40:54;2025-07-08T12:33:01

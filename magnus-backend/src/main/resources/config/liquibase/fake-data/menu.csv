@@ -1,0 +1,11 @@
+id;name;description;type;price_per_person;cost_per_person;min_people;max_people;restaurant;preparation_time;is_active;is_template;version;created_at;updated_at
+1;yellowish plus;../fake-data/blob/hipster.txt;SNACKS;25720.03;26077.8;22958;1023;expensive;1473;true;true;21084;2025-07-07T21:31:50;2025-07-08T12:56:10
+2;dress worth;../fake-data/blob/hipster.txt;DINNER;29096;28326.88;17777;6862;gray actually except;29906;true;false;15800;2025-07-08T01:17:01;2025-07-08T09:27:26
+3;thump;../fake-data/blob/hipster.txt;BRUNCH;25000.13;3198.69;23386;12969;um circa intensely;5154;true;true;14313;2025-07-08T11:40:28;2025-07-07T18:26:41
+4;pfft which woefully;../fake-data/blob/hipster.txt;CATERING;23283.58;4067.77;23850;27308;aboard quickly how;9620;true;false;18730;2025-07-08T14:23:46;2025-07-08T03:42:29
+5;hm beautifully qua;../fake-data/blob/hipster.txt;DINNER;29142.05;28139.44;8773;2326;baptise commercial however;10058;true;true;23441;2025-07-08T06:33:18;2025-07-07T16:41:04
+6;place scram before;../fake-data/blob/hipster.txt;BRUNCH;12903.87;493.99;10290;20313;yet scrap put;16684;true;true;17798;2025-07-07T16:25:11;2025-07-08T05:53:33
+7;gah;../fake-data/blob/hipster.txt;DINNER;29306.25;1949.98;30833;16918;cuckoo clavicle;6191;false;false;29125;2025-07-08T05:34:04;2025-07-08T02:56:15
+8;popularize ugh forgather;../fake-data/blob/hipster.txt;LUNCH;28871.3;10704.08;16301;23669;rekindle;3658;false;false;17812;2025-07-07T18:04:10;2025-07-08T14:05:36
+9;drat categorise perfection;../fake-data/blob/hipster.txt;BREAKFAST;29910.6;19988.39;28479;231;beyond ha;11707;true;true;5676;2025-07-07T18:43:37;2025-07-08T06:59:05
+10;cautiously procrastinate than;../fake-data/blob/hipster.txt;CATERING;23018.11;21268.65;12408;21835;recount;20666;true;true;29796;2025-07-08T12:57:05;2025-07-07T16:57:12

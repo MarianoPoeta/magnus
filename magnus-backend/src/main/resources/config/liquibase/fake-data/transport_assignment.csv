@@ -1,0 +1,11 @@
+id;guest_count;duration;distance;pickup_location;dropoff_location;pickup_time;return_time;calculated_price;calculated_cost;notes;created_at;updated_at;transport_id
+1;795;303.51;4411.6;ugh submitter;polyester;2025-07-07T16:05:28;2025-07-08T01:31:04;2283.59;22869.51;../fake-data/blob/hipster.txt;2025-07-08T11:13:59;2025-07-07T23:23:37;1
+2;4338;27064.89;25405.51;internalise;stained;2025-07-08T10:30:31;2025-07-07T20:57:18;10163.98;19500.27;../fake-data/blob/hipster.txt;2025-07-07T17:41:00;2025-07-07T15:35:40;2
+3;4841;2889;3225.44;mainstream;victorious;2025-07-08T12:05:55;2025-07-07T22:09:56;21664.34;29240.27;../fake-data/blob/hipster.txt;2025-07-07T22:30:51;2025-07-08T01:49:02;3
+4;7635;13571.25;22002.96;qualified rewarding how;dramatic decision prohibition;2025-07-07T19:02:38;2025-07-08T02:49:26;10483.49;20597.76;../fake-data/blob/hipster.txt;2025-07-07T15:56:19;2025-07-08T03:47:55;4
+5;19321;10164.51;13718.2;pish;rust whose;2025-07-08T09:38:19;2025-07-08T05:08:06;29741.89;31201.73;../fake-data/blob/hipster.txt;2025-07-08T08:30:12;2025-07-08T06:51:18;5
+6;2040;12850.74;1157.52;after phooey;dock likewise;2025-07-07T18:50:31;2025-07-08T00:42:03;19384.2;19903.98;../fake-data/blob/hipster.txt;2025-07-08T02:06:13;2025-07-07T21:20:08;6
+7;11792;15711.43;25765.15;regarding;along;2025-07-07T22:31:40;2025-07-08T08:43:47;15473.54;29003.46;../fake-data/blob/hipster.txt;2025-07-08T02:36:13;2025-07-08T07:19:02;7
+8;26740;16827.97;10821.69;thump zowie meh;toward strategy;2025-07-07T16:10:44;2025-07-08T05:56:20;9983.15;19545.59;../fake-data/blob/hipster.txt;2025-07-08T04:26:32;2025-07-07T15:24:04;8
+9;15023;12510.89;4583.7;guidance yesterday hm;wholly separately pick;2025-07-08T02:27:27;2025-07-08T08:21:32;4700.69;3921.48;../fake-data/blob/hipster.txt;2025-07-08T03:04:07;2025-07-08T00:45:40;9
+10;18116;10199.91;26369.36;gah;upon;2025-07-07T16:20:01;2025-07-08T03:29:01;10543.07;16386.03;../fake-data/blob/hipster.txt;2025-07-08T04:23:46;2025-07-08T00:19:08;10

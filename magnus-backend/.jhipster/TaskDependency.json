@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20250708150023"
+  },
+  "applications": ["magnus"],
+  "documentation": "Task dependency management",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dependencyType",
+      "fieldType": "DependencyType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "BLOCKS (Task blocks another),REQUIRES (Task requires another),SUGGESTS (Task suggests another)"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "TaskDependency",
+  "relationships": [
+    {
+      "otherEntityName": "task",
+      "relationshipName": "prerequisiteTask",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "task",
+      "otherEntityRelationshipName": "taskDependencies",
+      "relationshipName": "dependentTask",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

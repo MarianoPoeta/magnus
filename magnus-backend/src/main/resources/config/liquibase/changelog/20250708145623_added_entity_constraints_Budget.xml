@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Budget.
+    -->
+    <changeSet id="20250708145623-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="budget"
+                                 constraintName="fk_budget__created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="assigned_to_id"
+                                 baseTableName="budget"
+                                 constraintName="fk_budget__assigned_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="app_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                                 baseTableName="budget"
+                                 constraintName="fk_budget__client_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="client"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="template_id"
+                                 baseTableName="budget"
+                                 constraintName="fk_budget__template_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="budget_template"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="weekly_plan_id"
+                                 baseTableName="budget"
+                                 constraintName="fk_budget__weekly_plan_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="weekly_plan"
+                                 />
+    </changeSet>
+</databaseChangeLog>

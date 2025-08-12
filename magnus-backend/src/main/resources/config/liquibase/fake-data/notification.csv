@@ -1,0 +1,11 @@
+id;title;message;type;target_role;related_entity_type;related_entity_id;is_read;is_global;action_required;action_url;priority;expires_at;read_at;created_at;created_by_id
+1;fog mmm upward;../fake-data/blob/hipster.txt;INFO;SALES;markup distant terrorise;steak wilt arcade;true;true;true;cheese brr defiantly;LOW;2025-07-07T17:11:54;2025-07-07T18:28:16;2025-07-08T10:12:47;1
+2;unless than that;../fake-data/blob/hipster.txt;WARNING;SALES;reluctantly solidly;apostrophize;true;false;true;as;LOW;2025-07-08T12:05:50;2025-07-08T13:53:48;2025-07-08T09:27:11;2
+3;stylish probe;../fake-data/blob/hipster.txt;ERROR;SALES;dreamily blah hammock;woot;false;true;false;that oh;URGENT;2025-07-08T14:06:37;2025-07-08T00:05:23;2025-07-08T12:59:06;3
+4;orchestrate;../fake-data/blob/hipster.txt;WARNING;LOGISTICS;upright;minus;true;true;false;toady;HIGH;2025-07-08T01:12:01;2025-07-08T00:49:43;2025-07-08T14:29:11;4
+5;order;../fake-data/blob/hipster.txt;WARNING;SALES;lest;wombat among;false;true;true;safely barring familiar;MEDIUM;2025-07-08T10:35:30;2025-07-08T09:41:31;2025-07-08T08:15:34;5
+6;for;../fake-data/blob/hipster.txt;SUCCESS;ADMIN;oh settler against;however;false;true;false;gee below absentmindedly;URGENT;2025-07-07T21:37:31;2025-07-08T00:34:56;2025-07-08T10:48:28;6
+7;upon;../fake-data/blob/hipster.txt;INFO;COOK;psst;father;false;false;true;ha remand;MEDIUM;2025-07-08T07:52:14;2025-07-08T10:00:10;2025-07-08T12:38:21;7
+8;big why;../fake-data/blob/hipster.txt;INFO;SALES;cripple poorly below;whether barring ugh;true;false;true;without almighty;MEDIUM;2025-07-08T01:28:21;2025-07-08T02:15:28;2025-07-08T08:10:06;8
+9;guacamole;../fake-data/blob/hipster.txt;ERROR;LOGISTICS;kindheartedly;punctually while;true;true;false;always;LOW;2025-07-08T04:52:26;2025-07-07T22:09:57;2025-07-08T12:37:56;9
+10;kookily ack unruly;../fake-data/blob/hipster.txt;INFO;LOGISTICS;near but determined;lavish;true;true;true;receptor midst chase;LOW;2025-07-07T22:14:55;2025-07-08T13:09:23;2025-07-08T12:26:15;10

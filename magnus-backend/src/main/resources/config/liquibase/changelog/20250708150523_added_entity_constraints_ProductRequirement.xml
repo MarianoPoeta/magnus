@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity ProductRequirement.
+    -->
+    <changeSet id="20250708150523-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="product_requirement"
+                                 constraintName="fk_product_requirement__product_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="related_task_id"
+                                 baseTableName="product_requirement"
+                                 constraintName="fk_product_requirement__related_task_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="task"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="food_item_id"
+                                 baseTableName="product_requirement"
+                                 constraintName="fk_product_requirement__food_item_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="food_item"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="activity_id"
+                                 baseTableName="product_requirement"
+                                 constraintName="fk_product_requirement__activity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="activity"
+                                 />
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,50 @@
+﻿application {
+  config {
+    baseName magnus
+    applicationType monolith
+    packageName com.magnus
+    authenticationType jwt
+    prodDatabaseType mysql
+    devDatabaseType h2Disk
+    clientFramework no
+    enableSwaggerCodegen true
+    languages [en, es]
+    buildTool maven
+    serverPort 8080
+  }
+}
+
+enum BudgetStatus {
+  DRAFT,
+  PENDING,
+  APPROVED,
+  RESERVA,
+  REJECTED,
+  COMPLETED
+}
+
+entity Client {
+  name String required maxlength(100)
+  email String required
+  phone String required maxlength(20)
+  isActive Boolean required
+  createdAt Instant required
+}
+
+entity Budget {
+  name String required maxlength(200)
+  clientName String required maxlength(100)
+  eventDate LocalDate required
+  guestCount Integer required min(1) max(1000)
+  totalAmount BigDecimal required min(0)
+  status BudgetStatus required
+  createdAt Instant required
+}
+
+relationship OneToMany {
+  Client to Budget{client required}
+}
+
+dto * with mapstruct
+service * with serviceImpl
+paginate Client, Budget with pagination

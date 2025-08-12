@@ -1,0 +1,929 @@
+/**
+ * Magnus - Comprehensive JDL
+ * Sophisticated event management system with workflow automation,
+ * real-time synchronization, and intelligent resource planning
+ */
+
+application {
+  config {
+    baseName magnus
+    applicationType monolith
+    packageName com.magnus
+    authenticationType jwt
+    prodDatabaseType mysql
+    devDatabaseType mysql
+    clientFramework no
+    enableSwaggerCodegen true
+    languages [en, es]
+    websocket spring-websocket
+    enableHibernateCache true
+    cacheProvider ehcache
+    testFrameworks [cypress, junit]
+    buildTool maven
+    serverPort 8080
+    enableGradleEnterprise false
+    jhiPrefix pb
+    dtoSuffix DTO
+    enableTranslation true
+    nativeLanguage es
+    reactive false
+  }
+}
+
+// ================================
+// ENUMS - Business Domain Values
+// ================================
+
+enum UserRole {
+  ADMIN("Full system access"),
+  SALES("Budget creation and client management"),
+  LOGISTICS("Task management and shopping coordination"),
+  COOK("Cooking schedules and ingredient management")
+}
+
+enum BudgetStatus {
+  DRAFT("Initial creation"),
+  PENDING("Waiting for approval"),
+  APPROVED("Approved but not reserved"),
+  RESERVA("Reserved - triggers workflow"),
+  REJECTED("Rejected proposal"),
+  COMPLETED("Event completed"),
+  CANCELED("Canceled event")
+}
+
+enum TaskStatus {
+  TODO("Not started"),
+  IN_PROGRESS("Currently being worked on"),
+  DONE("Completed successfully"),
+  BLOCKED("Blocked by dependencies"),
+  CANCELED("Canceled task")
+}
+
+enum TaskType {
+  SHOPPING("Product procurement"),
+  RESERVATION("Venue/service booking"),
+  DELIVERY("Transportation and delivery"),
+  COOKING("Food preparation"),
+  PREPARATION("Event setup preparation"),
+  SETUP("Event setup"),
+  CLEANUP("Post-event cleanup"),
+  NEED("Additional requirement")
+}
+
+enum TaskPriority {
+  LOW("Low priority"),
+  MEDIUM("Medium priority"),
+  HIGH("High priority"),
+  URGENT("Urgent - immediate attention")
+}
+
+enum PaymentStatus {
+  UNPAID("No payment received"),
+  PARTIALLY_PAID("Partial payment received"),
+  PAID("Fully paid")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD("Credit card payment"),
+  CASH("Cash payment"),
+  BANK_TRANSFER("Bank transfer"),
+  CHECK("Check payment"),
+  OTHER("Other payment method")
+}
+
+enum MenuType {
+  BREAKFAST("Morning meal"),
+  LUNCH("Midday meal"),
+  DINNER("Evening meal"),
+  BRUNCH("Late morning meal"),
+  COCKTAIL("Cocktail service"),
+  CATERING("Catering service"),
+  SNACKS("Light refreshments")
+}
+
+enum FoodCategory {
+  APPETIZER("Starter course"),
+  MAIN("Main course"),
+  DESSERT("Dessert course"),
+  BEVERAGE("Drinks"),
+  SPECIAL("Special dietary items")
+}
+
+enum ActivityCategory {
+  ADVENTURE("Adventure activities"),
+  OUTDOOR("Outdoor activities"),
+  NIGHTLIFE("Nightlife entertainment"),
+  DINING("Dining experiences"),
+  INDOOR("Indoor activities"),
+  CULTURAL("Cultural experiences"),
+  SPORTS("Sports activities"),
+  ENTERTAINMENT("Entertainment shows")
+}
+
+enum AccommodationType {
+  SINGLE("Single room"),
+  DOUBLE("Double room"),
+  SUITE("Suite room"),
+  APARTMENT("Apartment rental"),
+  VILLA("Villa rental"),
+  HOSTEL("Hostel accommodation")
+}
+
+enum VehicleType {
+  BUS("Bus transportation"),
+  MINIVAN("Minivan"),
+  CAR("Car rental"),
+  LIMOUSINE("Limousine service"),
+  BOAT("Boat charter"),
+  MOTORCYCLE("Motorcycle rental")
+}
+
+enum ProductCategory {
+  MEAT("Meat products"),
+  VEGETABLES("Vegetables and produce"),
+  BEVERAGES("Drinks and beverages"),
+  CONDIMENTS("Seasonings and condiments"),
+  EQUIPMENT("Equipment and tools"),
+  DECORATIONS("Decorative items"),
+  SUPPLIES("General supplies"),
+  OTHER("Other products")
+}
+
+enum ProductUnit {
+  KG("Kilograms"),
+  G("Grams"),
+  LITERS("Liters"),
+  ML("Milliliters"),
+  UNITS("Individual units"),
+  PIECES("Pieces"),
+  BOXES("Boxes"),
+  BAGS("Bags"),
+  BOTTLES("Bottles"),
+  BUNCHES("Bunches"),
+  LEAVES("Leaves"),
+  SLICES("Slices")
+}
+
+enum NotificationType {
+  INFO("Information"),
+  SUCCESS("Success message"),
+  WARNING("Warning message"),
+  ERROR("Error message")
+}
+
+enum MealType {
+  BREAKFAST("Morning meal"),
+  LUNCH("Midday meal"),
+  DINNER("Evening meal"),
+  SNACK("Light meal")
+}
+
+enum DependencyType {
+  BLOCKS("Task blocks another"),
+  REQUIRES("Task requires another"),
+  SUGGESTS("Task suggests another")
+}
+
+enum TemplateType {
+  MENU("Menu template"),
+  ACTIVITY("Activity template"),
+  TRANSPORT("Transport template"),
+  ACCOMMODATION("Accommodation template"),
+  BUDGET("Budget template")
+}
+
+enum AuditAction {
+  CREATE("Entity created"),
+  UPDATE("Entity updated"),
+  DELETE("Entity deleted"),
+  STATUS_CHANGE("Status changed"),
+  APPROVE("Entity approved"),
+  REJECT("Entity rejected")
+}
+
+enum ConflictStatus {
+  NONE("No conflicts"),
+  DETECTED("Conflict detected"),
+  RESOLVED("Conflict resolved"),
+  ESCALATED("Conflict escalated")
+}
+
+enum WeeklyPlanStatus {
+  DRAFT("Planning in progress"),
+  IN_PROGRESS("Plan being executed"),
+  COMPLETED("Plan completed"),
+  ARCHIVED("Plan archived")
+}
+
+enum EventGender {
+  MEN("Men's event"),
+  WOMEN("Women's event"),
+  MIXED("Mixed gender event")
+}
+
+// ================================
+// CORE ENTITIES
+// ================================
+
+/**
+ * Custom User entity with role-based access control
+ * Replaces JHipster's built-in User entity
+ */
+entity AppUser {
+  login String required unique minlength(1) maxlength(50) pattern(/^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/)
+  firstName String maxlength(50)
+  lastName String maxlength(50)
+  email String required unique minlength(5) maxlength(254) pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  phone String maxlength(20)
+  role UserRole required
+  isActive Boolean required
+  profilePicture String maxlength(500)
+  preferences TextBlob
+  lastLoginAt Instant
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Client information and contact details
+ */
+entity Client {
+  name String required maxlength(100)
+  email String required unique pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  phone String required maxlength(20)
+  address TextBlob
+  company String maxlength(100)
+  taxId String maxlength(50)
+  notes TextBlob
+  isActive Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Reusable templates for budget creation
+ */
+entity BudgetTemplate {
+  name String required maxlength(100)
+  description TextBlob
+  type TemplateType required
+  category String maxlength(50)
+  isActive Boolean required
+  isSystem Boolean required
+  configuration TextBlob
+  templateData TextBlob
+  version Integer required min(1)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Weekly planning for logistics coordination
+ */
+entity WeeklyPlan {
+  weekStart LocalDate required
+  weekEnd LocalDate required
+  planName String required maxlength(100)
+  status WeeklyPlanStatus required
+  totalBudgets Integer min(0)
+  totalGuests Integer min(0)
+  estimatedCost BigDecimal min(0)
+  actualCost BigDecimal min(0)
+  notes TextBlob
+  isConsolidated Boolean required
+  consolidatedAt Instant
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Core budget entity - triggers workflow automation
+ */
+entity Budget {
+  name String required maxlength(200)
+  clientName String required maxlength(100)
+  eventDate LocalDate required
+  eventLocation String maxlength(200)
+  guestCount Integer required min(1) max(1000)
+  eventGender EventGender required
+  description TextBlob
+  totalAmount BigDecimal required min(0)
+  totalCost BigDecimal min(0)
+  profitMargin BigDecimal min(0)
+  mealsAmount BigDecimal min(0)
+  activitiesAmount BigDecimal min(0)
+  transportAmount BigDecimal min(0)
+  accommodationAmount BigDecimal min(0)
+  status BudgetStatus required
+  paymentStatus PaymentStatus required
+  isClosed Boolean required
+  internalNotes TextBlob
+  clientNotes TextBlob
+  templateId String maxlength(100)
+  workflowTriggered Boolean required
+  lastWorkflowExecution Instant
+  version Integer required min(1)
+  conflictStatus ConflictStatus required
+  lastModifiedBy String maxlength(50)
+  approvedAt Instant
+  reservedAt Instant
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Individual items within a budget
+ */
+entity BudgetItem {
+  itemType String required pattern(/^(menu|activity|transport|accommodation)$/)
+  templateId String required maxlength(100)
+  templateName String required maxlength(200)
+  quantity Integer required min(1)
+  unitPrice BigDecimal required min(0)
+  unitCost BigDecimal min(0)
+  totalPrice BigDecimal required min(0)
+  totalCost BigDecimal min(0)
+  customizations TextBlob
+  notes TextBlob
+  isCustomized Boolean required
+  version Integer required min(1)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Payment tracking for budgets
+ */
+entity Payment {
+  method PaymentMethod required
+  amount BigDecimal required min(0)
+  paymentDate LocalDate required
+  reference String maxlength(100)
+  notes TextBlob
+  isConfirmed Boolean required
+  confirmationNumber String maxlength(100)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Task management with workflow automation
+ */
+entity Task {
+  title String required maxlength(200)
+  description TextBlob
+  type TaskType required
+  priority TaskPriority required
+  status TaskStatus required
+  assignedToRole UserRole required
+  dueDate LocalDate required
+  dueTime LocalTime
+  estimatedDuration Integer min(0)
+  actualDuration Integer min(0)
+  location String maxlength(200)
+  requirements TextBlob
+  notes TextBlob
+  invoiceUrl String maxlength(500)
+  autoScheduled Boolean required
+  isRecurring Boolean required
+  parentTaskId String maxlength(100)
+  completedAt Instant
+  startedAt Instant
+  version Integer required min(1)
+  conflictStatus ConflictStatus required
+  lastModifiedBy String maxlength(50)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Task dependency management
+ */
+entity TaskDependency {
+  dependencyType DependencyType required
+  notes String maxlength(500)
+  isActive Boolean required
+  createdAt Instant required
+}
+
+/**
+ * Weekly consolidated shopping lists
+ */
+entity ShoppingItem {
+  productName String required maxlength(100)
+  totalQuantity Double required min(0)
+  unit ProductUnit required
+  category ProductCategory required
+  budgetIds TextBlob
+  clientNames TextBlob
+  isPurchased Boolean required
+  purchasedQuantity Double min(0)
+  weekStart LocalDate required
+  weekEnd LocalDate required
+  notes TextBlob
+  supplier String maxlength(100)
+  supplierContact String maxlength(200)
+  estimatedCost BigDecimal min(0)
+  actualCost BigDecimal min(0)
+  deliveryDate LocalDate
+  isConsolidated Boolean required
+  consolidatedAt Instant
+  purchasedAt Instant
+  conflictStatus ConflictStatus required
+  version Integer required min(1)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Cooking schedules with ingredient management
+ */
+entity CookingSchedule {
+  eventDate LocalDate required
+  cookingTime LocalTime required
+  mealType MealType required
+  menuName String required maxlength(100)
+  guestCount Integer required min(1)
+  specialInstructions TextBlob
+  isCompleted Boolean required
+  completedAt Instant
+  ingredientsReady Boolean required
+  estimatedDuration Integer min(0)
+  actualDuration Integer min(0)
+  startedAt Instant
+  version Integer required min(1)
+  conflictStatus ConflictStatus required
+  lastModifiedBy String maxlength(50)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Individual cooking ingredients with modification tracking
+ */
+entity CookingIngredient {
+  originalQuantity Double required min(0)
+  modifiedQuantity Double min(0)
+  modifiedUnit ProductUnit
+  notes TextBlob
+  addedByUser Boolean required
+  isAvailable Boolean required
+  availableAt Instant
+  lastModifiedBy String maxlength(50)
+  version Integer required min(1)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Product catalog with supplier information
+ */
+entity Product {
+  name String required maxlength(100)
+  description TextBlob
+  category ProductCategory required
+  unit ProductUnit required
+  pricePerUnit BigDecimal required min(0)
+  minOrderQuantity Double min(0)
+  maxOrderQuantity Double min(0)
+  supplier String maxlength(100)
+  supplierContact TextBlob
+  leadTime Integer min(0)
+  shelfLife Integer min(0)
+  storageConditions TextBlob
+  isActive Boolean required
+  lastUpdatedPrice Instant
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Product requirements linking to various entities
+ */
+entity ProductRequirement {
+  quantity Double required min(0)
+  unit ProductUnit required
+  notes TextBlob
+  estimatedCost BigDecimal min(0)
+  actualCost BigDecimal min(0)
+  isPurchased Boolean required
+  purchasedBy String maxlength(100)
+  purchasedAt Instant
+  version Integer required min(1)
+  conflictStatus ConflictStatus required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Menu templates and configurations
+ */
+entity Menu {
+  name String required maxlength(100)
+  description TextBlob
+  type MenuType required
+  pricePerPerson BigDecimal required min(0)
+  costPerPerson BigDecimal min(0)
+  minPeople Integer required min(1)
+  maxPeople Integer min(1)
+  restaurant String required maxlength(100)
+  preparationTime Integer min(0)
+  isActive Boolean required
+  isTemplate Boolean required
+  version Integer required min(1)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Individual menu items
+ */
+entity MenuItem {
+  name String required maxlength(100)
+  description TextBlob
+  category FoodCategory required
+  price BigDecimal required min(0)
+  cost BigDecimal min(0)
+  allergens TextBlob
+  dietaryInfo TextBlob
+  preparationTime Integer min(0)
+  isActive Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Food items catalog
+ */
+entity FoodItem {
+  name String required maxlength(100)
+  description TextBlob
+  category FoodCategory required
+  basePrice BigDecimal required min(0)
+  baseCost BigDecimal min(0)
+  servingSize String maxlength(50)
+  guestsPerUnit Integer required min(1)
+  maxUnits Integer min(1)
+  allergens TextBlob
+  dietaryInfo TextBlob
+  isActive Boolean required
+  isTemplate Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Activity catalog and templates
+ */
+entity Activity {
+  name String required maxlength(100)
+  description TextBlob
+  category ActivityCategory required
+  basePrice BigDecimal required min(0)
+  baseCost BigDecimal min(0)
+  duration Integer required min(1)
+  maxCapacity Integer required min(1)
+  location String required maxlength(200)
+  transportRequired Boolean required
+  transportIncluded Boolean required
+  equipmentProvided TextBlob
+  requirements TextBlob
+  isActive Boolean required
+  isTemplate Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Accommodation catalog and templates
+ */
+entity Accommodation {
+  name String required maxlength(100)
+  description TextBlob
+  type AccommodationType required
+  pricePerNight BigDecimal required min(0)
+  costPerNight BigDecimal min(0)
+  maxOccupancy Integer required min(1)
+  address TextBlob
+  amenities TextBlob
+  checkInTime String maxlength(10)
+  checkOutTime String maxlength(10)
+  rating Double min(0) max(5)
+  contactInfo TextBlob
+  isActive Boolean required
+  isTemplate Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Transport catalog and templates
+ */
+entity Transport {
+  name String required maxlength(100)
+  description TextBlob
+  vehicleType VehicleType required
+  capacity Integer required min(1)
+  pricePerHour BigDecimal required min(0)
+  pricePerKm BigDecimal min(0)
+  costPerHour BigDecimal min(0)
+  costPerKm BigDecimal min(0)
+  includesDriver Boolean required
+  driverCost BigDecimal min(0)
+  fuelType String maxlength(50)
+  contactInfo TextBlob
+  isActive Boolean required
+  isTemplate Boolean required
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Transport assignments for budgets
+ */
+entity TransportAssignment {
+  guestCount Integer required min(1)
+  duration Double required min(0.5)
+  distance Double min(0)
+  pickupLocation String maxlength(200)
+  dropoffLocation String maxlength(200)
+  pickupTime Instant
+  returnTime Instant
+  calculatedPrice BigDecimal required min(0)
+  calculatedCost BigDecimal min(0)
+  notes TextBlob
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Additional needs and requirements
+ */
+entity Need {
+  description String required maxlength(500)
+  quantity Integer required min(1)
+  unit String maxlength(20)
+  urgency TaskPriority required
+  status TaskStatus required
+  requestedDate LocalDate required
+  requiredDate LocalDate
+  fulfilledDate LocalDate
+  estimatedCost BigDecimal min(0)
+  actualCost BigDecimal min(0)
+  notes TextBlob
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * System notifications with role targeting
+ */
+entity Notification {
+  title String required maxlength(200)
+  message TextBlob required
+  type NotificationType required
+  targetRole UserRole
+  relatedEntityType String maxlength(50)
+  relatedEntityId String maxlength(100)
+  isRead Boolean required
+  isGlobal Boolean required
+  actionRequired Boolean required
+  actionUrl String maxlength(500)
+  priority TaskPriority required
+  expiresAt Instant
+  readAt Instant
+  createdAt Instant required
+}
+
+// ================================
+// ADVANCED SYSTEM ENTITIES
+// ================================
+
+/**
+ * System configuration management
+ */
+entity SystemConfig {
+  configKey String required unique maxlength(100)
+  configValue TextBlob required
+  description String maxlength(500)
+  isActive Boolean required
+  category String maxlength(50)
+  isSystem Boolean required
+  dataType String maxlength(20)
+  validationRules TextBlob
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Comprehensive audit trail
+ */
+entity AuditLog {
+  entityType String required maxlength(50)
+  entityId String required maxlength(100)
+  action AuditAction required
+  oldValue TextBlob
+  newValue TextBlob
+  fieldName String maxlength(100)
+  userId String maxlength(50)
+  userRole UserRole
+  timestamp Instant required
+  ipAddress String maxlength(45)
+  userAgent TextBlob
+  sessionId String maxlength(100)
+}
+
+/**
+ * Configurable workflow automation
+ */
+entity WorkflowTrigger {
+  triggerName String required maxlength(100)
+  entityType String required maxlength(50)
+  triggerCondition TextBlob required
+  actionType String required maxlength(50)
+  actionConfiguration TextBlob
+  isActive Boolean required
+  executionOrder Integer required min(1)
+  lastExecuted Instant
+  executionCount Integer min(0)
+  createdAt Instant required
+  updatedAt Instant required
+}
+
+/**
+ * Conflict resolution for concurrent modifications
+ */
+entity ConflictResolution {
+  entityType String required maxlength(50)
+  entityId String required maxlength(100)
+  fieldName String maxlength(100)
+  localValue TextBlob
+  remoteValue TextBlob
+  resolvedValue TextBlob
+  resolutionStrategy String required maxlength(50)
+  isResolved Boolean required
+  resolvedAt Instant
+  conflictDetectedAt Instant required
+  createdAt Instant required
+}
+
+// ================================
+// RELATIONSHIPS
+// ================================
+
+// User Management Relationships
+relationship OneToMany {
+  AppUser{createdBudgets} to Budget{createdBy required}
+  AppUser{assignedBudgets} to Budget{assignedTo}
+  AppUser{createdTasks} to Task{createdBy required}
+  AppUser{assignedTasks} to Task{assignedTo}
+  AppUser{requestedNeeds} to Need{requestedBy required}
+  AppUser{fulfilledNeeds} to Need{fulfilledBy}
+  AppUser{createdProducts} to Product{createdBy required}
+  AppUser{createdNotifications} to Notification{createdBy required}
+  AppUser{receivedNotifications} to Notification{targetUser}
+  AppUser{purchasedItems} to ShoppingItem{purchasedBy}
+  AppUser{createdWeeklyPlans} to WeeklyPlan{createdBy required}
+  AppUser{createdTemplates} to BudgetTemplate{createdBy required}
+  AppUser{createdConfigs} to SystemConfig{createdBy required}
+  AppUser{createdTriggers} to WorkflowTrigger{createdBy required}
+  AppUser{resolvedConflicts} to ConflictResolution{resolvedBy}
+}
+
+// Client Relationships
+relationship OneToMany {
+  Client to Budget{client required}
+}
+
+// Template System Relationships
+relationship OneToMany {
+  BudgetTemplate to Budget{template}
+}
+
+// Weekly Planning Relationships
+relationship OneToMany {
+  WeeklyPlan to Budget{weeklyPlan}
+  WeeklyPlan to ShoppingItem{weeklyPlan required}
+  WeeklyPlan to Task{weeklyPlan}
+}
+
+// Budget Core Relationships
+relationship OneToMany {
+  Budget to BudgetItem{budget required}
+  Budget to Payment{budget required}
+  Budget to Task{relatedBudget required}
+  Budget to TransportAssignment{budget}
+  Budget to CookingSchedule{budget required}
+}
+
+// Task Management Relationships
+relationship OneToMany {
+  Task to Need{parentTask required}
+  Task to ProductRequirement{relatedTask}
+  Task{taskDependencies} to TaskDependency{dependentTask required}
+}
+
+relationship ManyToOne {
+  TaskDependency{prerequisiteTask required} to Task
+}
+
+// Cooking System Relationships
+relationship OneToOne {
+  CookingSchedule{relatedTask} to Task
+}
+
+relationship OneToMany {
+  CookingSchedule to CookingIngredient{cookingSchedule required}
+}
+
+relationship ManyToOne {
+  CookingIngredient{productRequirement required} to ProductRequirement
+}
+
+// Product Management Relationships
+relationship ManyToOne {
+  ProductRequirement{product required} to Product
+}
+
+relationship OneToMany {
+  FoodItem to ProductRequirement{foodItem}
+  Activity to ProductRequirement{activity}
+}
+
+// Menu System Relationships
+relationship OneToMany {
+  Menu to MenuItem{menu required}
+}
+
+relationship ManyToMany {
+  Menu{includedFoodItems} to FoodItem{availableMenus}
+}
+
+// Transport Relationships
+relationship ManyToOne {
+  TransportAssignment{transport required} to Transport
+}
+
+relationship OneToMany {
+  Activity to TransportAssignment{activity}
+}
+
+// Audit and Monitoring Relationships
+relationship ManyToOne {
+  AuditLog{user} to AppUser
+  ConflictResolution{conflictUser} to AppUser
+}
+
+// ================================
+// CONFIGURATION
+// ================================
+
+// Generate DTOs for all entities
+dto * with mapstruct
+
+// Generate service layer for all entities
+service * with serviceImpl
+
+// Enable pagination for major entities
+paginate Client, Budget, Task, Product, Activity, Menu, Accommodation, Transport, 
+         Notification, ShoppingItem, CookingSchedule, AppUser, WeeklyPlan, 
+         BudgetTemplate, AuditLog, ConflictResolution, WorkflowTrigger, 
+         SystemConfig with pagination
+
+// Enable filtering for search capabilities
+filter Client, Budget, Task, Product, Activity, Menu, Accommodation, Transport, 
+       ShoppingItem, CookingSchedule, AppUser, WeeklyPlan, BudgetTemplate, 
+       AuditLog, ConflictResolution, Notification, WorkflowTrigger
+
+// Enable search for key entities
+search Client, Budget, Task, Product, Activity, Menu, Accommodation, Transport with elasticsearch
+
+// ================================
+// DEPLOYMENT CONFIGURATION
+// ================================
+
+deployment {
+  deploymentType docker-compose
+  serviceDiscoveryType no
+  monitoring prometheus
+  gatewayType no
+  appsFolders [magnus]
+  dockerRepositoryName "magnus"
+  dockerPushCommand "docker push"
+  kubernetesNamespace magnus
+  kubernetesServiceType LoadBalancer
+  ingressDomain "magnus.local"
+}
+
+// Microservice deployment option (future scalability)
+deployment {
+  deploymentType kubernetes
+  appsFolders [magnus]
+  clusteredDbApps [magnus]
+  kubernetesNamespace magnus
+  dockerRepositoryName "magnus"
+  serviceDiscoveryType eureka
+  istio true
+  monitoring prometheus
+  ingressDomain "magnus.local"
+} 

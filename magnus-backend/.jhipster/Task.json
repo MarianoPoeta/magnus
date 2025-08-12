@@ -1,0 +1,192 @@
+{
+  "annotations": {
+    "changelogDate": "20250708145923"
+  },
+  "applications": ["magnus"],
+  "documentation": "Task management with workflow automation",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "TaskType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SHOPPING (Product procurement),RESERVATION (Venue/service booking),DELIVERY (Transportation and delivery),COOKING (Food preparation),PREPARATION (Event setup preparation),SETUP (Event setup),CLEANUP (Post-event cleanup),NEED (Additional requirement)"
+    },
+    {
+      "fieldName": "priority",
+      "fieldType": "TaskPriority",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LOW (Low priority),MEDIUM (Medium priority),HIGH (High priority),URGENT (Urgent - immediate attention)"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "TaskStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TODO (Not started),IN_PROGRESS (Currently being worked on),DONE (Completed successfully),BLOCKED (Blocked by dependencies),CANCELED (Canceled task)"
+    },
+    {
+      "fieldName": "assignedToRole",
+      "fieldType": "UserRole",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ADMIN (Full system access),SALES (Budget creation and client management),LOGISTICS (Task management and shopping coordination),COOK (Cooking schedules and ingredient management)"
+    },
+    {
+      "fieldName": "dueDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dueTime",
+      "fieldType": "LocalTime"
+    },
+    {
+      "fieldName": "estimatedDuration",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "actualDuration",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "location",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "200"
+    },
+    {
+      "fieldName": "requirements",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "invoiceUrl",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "autoScheduled",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isRecurring",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "parentTaskId",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "completedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "startedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "version",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "conflictStatus",
+      "fieldType": "ConflictStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NONE (No conflicts),DETECTED (Conflict detected),RESOLVED (Conflict resolved),ESCALATED (Conflict escalated)"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Task",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "need",
+      "otherEntityRelationshipName": "parentTask",
+      "relationshipName": "need",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "productRequirement",
+      "otherEntityRelationshipName": "relatedTask",
+      "relationshipName": "productRequirement",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "taskDependency",
+      "otherEntityRelationshipName": "dependentTask",
+      "relationshipName": "taskDependencies",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "appUser",
+      "otherEntityRelationshipName": "createdTasks",
+      "relationshipName": "createdBy",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "appUser",
+      "otherEntityRelationshipName": "assignedTasks",
+      "relationshipName": "assignedTo",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "weeklyPlan",
+      "relationshipName": "weeklyPlan",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "budget",
+      "relationshipName": "relatedBudget",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

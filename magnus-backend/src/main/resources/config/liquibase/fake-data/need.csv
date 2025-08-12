@@ -1,0 +1,11 @@
+id;description;quantity;unit;urgency;status;requested_date;required_date;fulfilled_date;estimated_cost;actual_cost;notes;created_at;updated_at;requested_by_id;parent_task_id
+1;likewise;30533;while gadzooks;LOW;TODO;2025-07-07;2025-07-07;2025-07-07;5210.28;8751.29;../fake-data/blob/hipster.txt;2025-07-07T18:16:29;2025-07-07T21:48:19;1;1
+2;like tray;12328;waft hm zen;MEDIUM;CANCELED;2025-07-08;2025-07-07;2025-07-08;12836.07;1927.17;../fake-data/blob/hipster.txt;2025-07-08T11:22:25;2025-07-08T02:15:44;2;2
+3;all with amongst;20416;crystallize;LOW;BLOCKED;2025-07-08;2025-07-08;2025-07-08;21980.49;8257.86;../fake-data/blob/hipster.txt;2025-07-08T11:24:40;2025-07-08T13:30:06;3;3
+4;fearless righteously;23374;bah turbulent pfft;HIGH;IN_PROGRESS;2025-07-08;2025-07-07;2025-07-08;2448.22;21036.96;../fake-data/blob/hipster.txt;2025-07-07T21:50:13;2025-07-08T10:39:07;4;4
+5;exotic westernise;4032;dash wear;MEDIUM;BLOCKED;2025-07-07;2025-07-08;2025-07-07;21251.29;4085.08;../fake-data/blob/hipster.txt;2025-07-07T23:23:01;2025-07-08T07:12:46;5;5
+6;director;13172;of that regarding;LOW;DONE;2025-07-07;2025-07-08;2025-07-08;28864.87;11154.87;../fake-data/blob/hipster.txt;2025-07-08T12:04:41;2025-07-08T06:10:58;6;6
+7;sundae even provided;13271;along singe;URGENT;DONE;2025-07-08;2025-07-07;2025-07-08;18413.26;4545.37;../fake-data/blob/hipster.txt;2025-07-07T15:14:14;2025-07-08T14:54:42;7;7
+8;splurge;29707;smog swiftly for;URGENT;TODO;2025-07-08;2025-07-08;2025-07-08;24059.36;6042.92;../fake-data/blob/hipster.txt;2025-07-08T02:23:03;2025-07-08T04:20:40;8;8
+9;than polite furthermore;32601;trouser;HIGH;DONE;2025-07-08;2025-07-08;2025-07-08;4366.26;1694.49;../fake-data/blob/hipster.txt;2025-07-07T16:33:16;2025-07-08T05:55:00;9;9
+10;noisily if;9175;till insistent;URGENT;TODO;2025-07-08;2025-07-08;2025-07-08;229.78;28172.79;../fake-data/blob/hipster.txt;2025-07-08T07:23:22;2025-07-08T10:45:35;10;10

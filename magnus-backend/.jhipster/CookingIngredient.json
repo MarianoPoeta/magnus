@@ -1,0 +1,86 @@
+{
+  "annotations": {
+    "changelogDate": "20250708150323"
+  },
+  "applications": ["magnus"],
+  "documentation": "Individual cooking ingredients with modification tracking",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "originalQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "modifiedQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "modifiedUnit",
+      "fieldType": "ProductUnit",
+      "fieldValues": "KG (Kilograms),G (Grams),LITERS (Liters),ML (Milliliters),UNITS (Individual units),PIECES (Pieces),BOXES (Boxes),BAGS (Bags),BOTTLES (Bottles),BUNCHES (Bunches),LEAVES (Leaves),SLICES (Slices)"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "addedByUser",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isAvailable",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "availableAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastModifiedBy",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "version",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "CookingIngredient",
+  "relationships": [
+    {
+      "otherEntityName": "productRequirement",
+      "relationshipName": "productRequirement",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "cookingSchedule",
+      "relationshipName": "cookingSchedule",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

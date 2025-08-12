@@ -1,0 +1,175 @@
+# Magnus Frontend Environment Configuration
+# Copy this file to .env for development or .env.production for production builds
+
+# ==========================================
+# API CONFIGURATION
+# ==========================================
+# Backend API URL
+VITE_API_URL=http://localhost:8080/api
+
+# WebSocket URL for real-time features
+VITE_WS_URL=ws://localhost:8080/websocket
+
+# Application Environment
+VITE_ENVIRONMENT=development
+
+# ==========================================
+# AUTHENTICATION CONFIGURATION
+# ==========================================
+# JWT Token Configuration
+VITE_JWT_STORAGE_KEY=magnus-auth-token
+VITE_JWT_REFRESH_THRESHOLD=300000
+
+# Session Configuration
+VITE_SESSION_TIMEOUT=3600000
+VITE_REMEMBER_ME_DURATION=2592000000
+
+# ==========================================
+# APPLICATION CONFIGURATION
+# ==========================================
+# Application Information
+VITE_APP_NAME=Magnus
+VITE_APP_VERSION=1.0.0
+VITE_APP_DESCRIPTION=Sophisticated Event Management System
+
+# Company Information
+VITE_COMPANY_NAME=Magnus Events
+VITE_COMPANY_EMAIL=info@magnus.com
+VITE_COMPANY_PHONE=+1-555-0123
+
+# ==========================================
+# FEATURE FLAGS
+# ==========================================
+# Enable/Disable Features
+VITE_ENABLE_ANALYTICS=true
+VITE_ENABLE_ERROR_REPORTING=true
+VITE_ENABLE_PERFORMANCE_MONITORING=true
+VITE_ENABLE_REAL_TIME_UPDATES=true
+
+# Debug Features (Development Only)
+VITE_ENABLE_DEBUG_PANEL=true
+VITE_ENABLE_REDUX_DEVTOOLS=true
+VITE_ENABLE_PERFORMANCE_PROFILER=false
+
+# ==========================================
+# UI CONFIGURATION
+# ==========================================
+# Theme Configuration
+VITE_DEFAULT_THEME=light
+VITE_ENABLE_DARK_MODE=true
+VITE_ENABLE_THEME_SWITCHING=true
+
+# Localization
+VITE_DEFAULT_LANGUAGE=es
+VITE_AVAILABLE_LANGUAGES=en,es
+VITE_ENABLE_RTL=false
+
+# ==========================================
+# PERFORMANCE CONFIGURATION
+# ==========================================
+# API Configuration
+VITE_API_TIMEOUT=30000
+VITE_API_RETRY_ATTEMPTS=3
+VITE_API_RETRY_DELAY=1000
+
+# Cache Configuration
+VITE_CACHE_ENABLED=true
+VITE_CACHE_DURATION=300000
+VITE_OFFLINE_SUPPORT=false
+
+# ==========================================
+# MONITORING & ANALYTICS
+# ==========================================
+# Error Reporting
+VITE_SENTRY_DSN=
+VITE_SENTRY_ENVIRONMENT=development
+
+# Analytics
+VITE_GOOGLE_ANALYTICS_ID=
+VITE_MIXPANEL_TOKEN=
+
+# Performance Monitoring
+VITE_ENABLE_WEB_VITALS=true
+VITE_PERFORMANCE_BUDGET_JS=250000
+VITE_PERFORMANCE_BUDGET_CSS=100000
+
+# ==========================================
+# DEVELOPMENT CONFIGURATION
+# ==========================================
+# Development Server
+VITE_DEV_SERVER_PORT=3000
+VITE_DEV_SERVER_HOST=localhost
+VITE_DEV_SERVER_HTTPS=false
+
+# Hot Module Replacement
+VITE_HMR_ENABLED=true
+VITE_HMR_PORT=24678
+
+# Build Configuration
+VITE_BUILD_SOURCEMAP=true
+VITE_BUILD_MINIFY=true
+VITE_BUILD_ANALYZE_BUNDLE=false
+
+# ==========================================
+# PRODUCTION OVERRIDES
+# ==========================================
+# Uncomment and configure for production deployment
+
+# Production API URL
+# VITE_API_URL=https://api.magnus-production.com/api
+# VITE_WS_URL=wss://api.magnus-production.com/websocket
+
+# Production Environment
+# VITE_ENVIRONMENT=production
+
+# Security Configuration
+# VITE_ENABLE_CSP=true
+# VITE_ENABLE_HTTPS_ONLY=true
+
+# Performance Configuration
+# VITE_CACHE_DURATION=3600000
+# VITE_OFFLINE_SUPPORT=true
+
+# Monitoring
+# VITE_SENTRY_ENVIRONMENT=production
+# VITE_ENABLE_ERROR_REPORTING=true
+
+# Disable Development Features
+# VITE_ENABLE_DEBUG_PANEL=false
+# VITE_ENABLE_REDUX_DEVTOOLS=false
+# VITE_BUILD_SOURCEMAP=false
+
+# ==========================================
+# TESTING CONFIGURATION
+# ==========================================
+# Test Environment
+VITE_TEST_API_URL=http://localhost:8080/api
+VITE_TEST_USER_EMAIL=test@magnus.com
+VITE_TEST_USER_PASSWORD=testpassword
+
+# Mock Configuration
+VITE_ENABLE_API_MOCKING=false
+VITE_MOCK_DELAY=1000
+
+# ==========================================
+# INTEGRATION CONFIGURATION
+# ==========================================
+# External Services
+VITE_MAPS_API_KEY=
+VITE_PAYMENT_GATEWAY_KEY=
+VITE_EMAIL_SERVICE_KEY=
+
+# File Upload Configuration
+VITE_MAX_FILE_SIZE=10485760
+VITE_ALLOWED_FILE_TYPES=jpg,jpeg,png,pdf,doc,docx,xls,xlsx
+
+# ==========================================
+# SECURITY CONFIGURATION
+# ==========================================
+# Content Security Policy
+VITE_CSP_SCRIPT_SRC=self,unsafe-inline
+VITE_CSP_STYLE_SRC=self,unsafe-inline
+VITE_CSP_IMG_SRC=self,data,https:
+
+# CORS Configuration
+VITE_CORS_CREDENTIALS=true 

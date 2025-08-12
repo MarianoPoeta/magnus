@@ -1,0 +1,11 @@
+id;original_quantity;modified_quantity;modified_unit;notes;added_by_user;is_available;available_at;last_modified_by;version;created_at;updated_at;product_requirement_id;cooking_schedule_id
+1;19135.8;8022.26;BUNCHES;../fake-data/blob/hipster.txt;false;false;2025-07-07T15:33:50;wetly that functional;16167;2025-07-07T19:33:23;2025-07-07T23:09:57;1;1
+2;12265.5;3358.9;ML;../fake-data/blob/hipster.txt;false;true;2025-07-08T07:55:21;searchingly knowledgeably;30304;2025-07-07T17:34:22;2025-07-08T10:30:34;2;2
+3;15778.58;26333.24;BAGS;../fake-data/blob/hipster.txt;true;true;2025-07-07T19:52:29;obnoxiously kiddingly;29050;2025-07-08T05:58:24;2025-07-07T21:09:54;3;3
+4;10569.71;24521.64;UNITS;../fake-data/blob/hipster.txt;false;false;2025-07-08T03:46:50;admonish even merrily;4925;2025-07-08T12:24:38;2025-07-08T08:02:49;4;4
+5;2345.39;2486.26;KG;../fake-data/blob/hipster.txt;true;true;2025-07-08T09:24:14;thigh;32298;2025-07-07T16:47:52;2025-07-08T14:34:33;5;5
+6;4687.81;13472.41;G;../fake-data/blob/hipster.txt;false;true;2025-07-08T04:17:47;department ugh;11687;2025-07-08T00:22:35;2025-07-07T19:34:42;6;6
+7;29781.33;4000.81;ML;../fake-data/blob/hipster.txt;true;false;2025-07-07T19:52:21;whoa certainly fully;19921;2025-07-08T02:09:41;2025-07-07T19:14:49;7;7
+8;8035.94;2705.07;SLICES;../fake-data/blob/hipster.txt;false;true;2025-07-07T18:39:49;crystallize wonderfully whoa;10108;2025-07-08T12:24:28;2025-07-08T14:14:16;8;8
+9;30234.68;28579.33;BOXES;../fake-data/blob/hipster.txt;false;true;2025-07-08T04:05:59;sew;16682;2025-07-08T03:24:40;2025-07-07T19:34:32;9;9
+10;26999.14;16147.05;BAGS;../fake-data/blob/hipster.txt;true;false;2025-07-08T11:04:14;during whenever crocodile;3215;2025-07-07T19:20:40;2025-07-07T18:31:53;10;10

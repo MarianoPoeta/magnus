@@ -1,0 +1,109 @@
+{
+  "annotations": {
+    "changelogDate": "20250708150423"
+  },
+  "applications": ["magnus"],
+  "documentation": "Product catalog with supplier information",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "ProductCategory",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MEAT (Meat products),VEGETABLES (Vegetables and produce),BEVERAGES (Drinks and beverages),CONDIMENTS (Seasonings and condiments),EQUIPMENT (Equipment and tools),DECORATIONS (Decorative items),SUPPLIES (General supplies),OTHER (Other products)"
+    },
+    {
+      "fieldName": "unit",
+      "fieldType": "ProductUnit",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "KG (Kilograms),G (Grams),LITERS (Liters),ML (Milliliters),UNITS (Individual units),PIECES (Pieces),BOXES (Boxes),BAGS (Bags),BOTTLES (Bottles),BUNCHES (Bunches),LEAVES (Leaves),SLICES (Slices)"
+    },
+    {
+      "fieldName": "pricePerUnit",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "minOrderQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "maxOrderQuantity",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "supplier",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "supplierContact",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "leadTime",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "shelfLife",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "storageConditions",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lastUpdatedPrice",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Product",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "appUser",
+      "otherEntityRelationshipName": "createdProducts",
+      "relationshipName": "createdBy",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
