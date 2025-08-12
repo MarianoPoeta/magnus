@@ -1,0 +1,32 @@
+{
+  "name": "Magnus Monorepo",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "17-bullseye",
+      "NODE_VERSION": "22.15.0"
+    }
+  },
+  "features": {
+    "docker-in-docker": "latest",
+    "docker-from-docker": "latest"
+  },
+  "forwardPorts": [8080, 5173, 3306],
+  "postCreateCommand": "set -e; cd magnus-frontend && (npm ci || bun install || pnpm i || yarn); cd ../magnus-backend && chmod +x mvnw || true && ./mvnw -q -DskipTests -T1C compile",
+  "postStartCommand": "set -e; if ! docker ps --format '{{.Names}}' | grep -q '^magnus-mysql$'; then docker rm -f magnus-mysql 2>/dev/null || true; docker run --name magnus-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=magnus -e MYSQL_USER=magnus -e MYSQL_PASSWORD=magnus -p 3306:3306 -d mysql:8 --default-authentication-plugin=mysql_native_password --mysql-native-password=ON; fi",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "java.jdt.ls.java.home": "/docker-java-home"
+      },
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "pivotal.vscode-boot-dev-pack",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}
+
