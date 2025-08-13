@@ -167,6 +167,20 @@ docker compose -f src/main/docker/app.yml up -d
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
 
+### Root Orchestration (Frontend + Backend)
+
+From the repository root you can spin up backend, frontend and MySQL together:
+
+Dev:
+```
+docker compose -f docker-compose.dev.yml up --build
+```
+
+Prod:
+```
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
 ## Continuous Integration (optional)
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.

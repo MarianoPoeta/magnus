@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: magnus
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    image: magnus-backend:latest
+    build:
+      context: ./magnus-backend
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: prod,api-docs
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/magnus?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: magnus-frontend:latest
+    build:
+      context: ./magnus-frontend
+      dockerfile: Dockerfile
+    environment:
+      VITE_API_URL: http://backend:8080/api
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+

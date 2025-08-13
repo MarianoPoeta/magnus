@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -18,13 +18,15 @@ import {
   X
 } from 'lucide-react';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import ProductForm from '../components/ProductForm';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Product } from '../types/Product';
 
 const Products: React.FC = () => {
   const navigate = useNavigate();
-  const { products, addProduct, updateProduct, deleteProduct } = useStore();
+  const { products } = useStore();
+  const { loadProducts, createProduct, updateProduct, deleteProduct } = useApi();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
@@ -41,7 +43,7 @@ const Products: React.FC = () => {
     notes: ''
   });
 
-  const categories = ['meat', 'vegetables', 'beverages', 'condiments', 'equipment', 'decorations', 'other'];
+  const categories = ['meat', 'vegetables', 'beverages', 'condiments', 'equipment', 'decorations', 'supplies', 'other'];
   const units = ['kg', 'units', 'liters', 'pieces', 'boxes', 'bags', 'bottles'];
 
   const handleCreateNew = () => {
@@ -66,28 +68,28 @@ const Products: React.FC = () => {
       description: product.description,
       category: product.category,
       unit: product.unit,
-      estimatedPrice: product.estimatedPrice,
+      estimatedPrice: (product.pricePerUnit ?? product.estimatedPrice ?? product.cost ?? 0),
       supplier: product.supplier,
       notes: product.notes || ''
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const productData = {
       ...formData,
-      id: editingProduct?.id || `p${Date.now()}`,
-      cost: formData.estimatedPrice, // Map estimatedPrice to required cost field
+      cost: formData.estimatedPrice,
+      pricePerUnit: formData.estimatedPrice,
       isActive: true,
       createdAt: editingProduct?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      category: formData.category as 'meat' | 'vegetables' | 'beverages' | 'condiments' | 'equipment' | 'decorations' | 'other',
-      unit: formData.unit as 'kg' | 'units' | 'liters' | 'pieces' | 'boxes' | 'bags' | 'bottles'
-    };
+      category: formData.category,
+      unit: formData.unit
+    } as any;
 
     if (editingProduct) {
-      updateProduct(productData);
+      await updateProduct(String(editingProduct.id), productData);
     } else {
-      addProduct(productData);
+      await createProduct(productData);
     }
 
     setIsCreating(false);
@@ -117,11 +119,15 @@ const Products: React.FC = () => {
     });
   };
 
-  const handleDelete = (productId: string) => {
+  const handleDelete = async (productId: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      deleteProduct(productId);
+      await deleteProduct(productId);
     }
   };
+
+  useEffect(() => {
+    loadProducts().catch(() => {});
+  }, [loadProducts]);
 
   const filteredProducts = products.filter(product => 
     (product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -333,7 +339,7 @@ const Products: React.FC = () => {
                     )}
                     <div className="flex items-center gap-4 text-sm text-slate-500">
                       <span className="font-medium text-green-600">
-                        ${product.estimatedPrice.toLocaleString()}
+                        ${((product.pricePerUnit ?? product.estimatedPrice ?? product.cost) ?? 0).toLocaleString()}
                       </span>
                       <span>Unidad: {product.unit}</span>
                       {product.supplier && (

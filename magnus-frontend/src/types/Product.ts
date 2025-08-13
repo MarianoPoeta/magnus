@@ -6,6 +6,7 @@ export interface Product {
   unit: string;
   description?: string;
   estimatedPrice?: number;
+  pricePerUnit?: number; // New API field; prefer this when available
   supplier?: string;
   notes?: string;
   isActive: boolean;

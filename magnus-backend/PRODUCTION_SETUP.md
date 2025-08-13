@@ -112,6 +112,14 @@ MYSQL_ROOT_PASSWORD=your_mysql_root_password
 FRONTEND_URL=https://your-frontend-domain.com
 ```
 
+### **3. Root-level Compose (Backend + Frontend + MySQL)**
+
+From repository root you can build and run the full stack with:
+
+```
+docker compose -f docker-compose.prod.yml up --build -d
+```
+
 ## ☁️ Cloud Deployment
 
 ### **AWS Elastic Beanstalk**

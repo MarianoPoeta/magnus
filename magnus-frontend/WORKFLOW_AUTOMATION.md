@@ -200,6 +200,12 @@ const SCHEDULING_RULES = {
 - **Notification Service** - Sends role-based alerts
 - **Analytics Engine** - Tracks performance metrics
 
+## 🧩 Background Agents & CI
+
+- Spring Scheduled jobs: example in backend `UserService.removeNotActivatedUsers()`; add new schedulers as needed for batch tasks.
+- SonarQube: start with `docker compose -f magnus-backend/src/main/docker/sonar.yml up -d` and run analysis using the Maven goal shown in `magnus-backend/README.md`.
+- CodeQL: enabled via `.github/workflows/ci.yml` to scan Java and JS/TS on PRs.
+
 ---
 
 **Usage Tips:**
