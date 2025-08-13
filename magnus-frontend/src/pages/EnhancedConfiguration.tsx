@@ -679,7 +679,7 @@ const EnhancedConfiguration: React.FC = () => {
             onEdit: (editItem: ConfigurationItem) => {
               handleEdit(activeTab as any, editItem);
             },
-            onDelete: (id: string) => {
+            onDelete: async (id: string) => {
               const deleteMethod = {
                 accommodations: deleteAccommodation,
                 menus: deleteMenu,
@@ -687,7 +687,12 @@ const EnhancedConfiguration: React.FC = () => {
                 products: deleteProduct,
                 transports: deleteTransport,
               }[activeTab];
-              if (deleteMethod) deleteMethod(id);
+              if (!deleteMethod) return;
+              try {
+                await deleteMethod(id);
+              } catch (error) {
+                console.error('Delete failed:', error);
+              }
             }
           };
 

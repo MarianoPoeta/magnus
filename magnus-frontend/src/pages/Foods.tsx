@@ -85,9 +85,12 @@ const Foods: React.FC = () => {
     setEditingFood(null);
   };
 
-  const handleDelete = (foodId: string) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta comida?')) {
-      deleteFood(foodId);
+  const handleDelete = async (foodId: string) => {
+    if (!window.confirm('¿Estás seguro de que quieres eliminar esta comida?')) return;
+    try {
+      await deleteFood(foodId);
+    } catch (error) {
+      console.error('Error deleting food:', error);
     }
   };
 
