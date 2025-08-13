@@ -28,6 +28,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import { EnhancedConfigurationForm } from '../components/EnhancedConfigurationForms';
 import { ConfigurationItem, ConfigurationFormData } from '../types/Forms';
 import { Accommodation } from '../types/Accommodation';
@@ -45,22 +46,24 @@ const EnhancedConfiguration: React.FC = () => {
     products, 
     transportTemplates,
     currentUser,
-    addAccommodation,
+  } = useStore();
+  const {
+    createAccommodation,
     updateAccommodation,
     deleteAccommodation,
-    addMenu,
+    createMenu,
     updateMenu,
     deleteMenu,
-    addFood,
+    createFood,
     updateFood,
     deleteFood,
-    addProduct,
+    createProduct,
     updateProduct,
     deleteProduct,
-    addTransportTemplate,
-    updateTransportTemplate,
-    deleteTransportTemplate
-  } = useStore();
+    createTransport,
+    updateTransport,
+    deleteTransport,
+  } = useApi();
   
   // Enhanced state management
   const [activeTab, setActiveTab] = useState('accommodations');
@@ -87,7 +90,7 @@ const EnhancedConfiguration: React.FC = () => {
     setDialogOpen(true);
   };
 
-  const handleSave = (formData: ConfigurationFormData) => {
+  const handleSave = async (formData: ConfigurationFormData) => {
     // Convert form data to entity data
     const data = {
       ...formData,
@@ -98,37 +101,37 @@ const EnhancedConfiguration: React.FC = () => {
     if (editingItem) {
       switch (dialogType) {
         case 'accommodation':
-          updateAccommodation(data as Accommodation);
+          await updateAccommodation(String(data.id), data as Accommodation);
           break;
         case 'menu':
-          updateMenu(data as Menu);
+          await updateMenu(String(data.id), data as Menu);
           break;
         case 'food':
-          updateFood(data as Food);
+          await updateFood(String(data.id), data as Food);
           break;
         case 'product':
-          updateProduct(data as Product);
+          await updateProduct(String(data.id), data as Product);
           break;
         case 'transport':
-          updateTransportTemplate(data as TransportTemplate);
+          await updateTransport(String(data.id), data as TransportTemplate);
           break;
       }
     } else {
       switch (dialogType) {
         case 'accommodation':
-          addAccommodation(data as Accommodation);
+          await createAccommodation(data as Accommodation);
           break;
         case 'menu':
-          addMenu(data as Menu);
+          await createMenu(data as Menu);
           break;
         case 'food':
-          addFood(data as Food);
+          await createFood(data as Food);
           break;
         case 'product':
-          addProduct(data as Product);
+          await createProduct(data as Product);
           break;
         case 'transport':
-          addTransportTemplate(data as TransportTemplate);
+          await createTransport(data as TransportTemplate);
           break;
       }
     }
@@ -682,9 +685,9 @@ const EnhancedConfiguration: React.FC = () => {
                 menus: deleteMenu,
                 foods: deleteFood,
                 products: deleteProduct,
-                transports: deleteTransportTemplate
+                transports: deleteTransport,
               }[activeTab];
-              deleteMethod?.(id);
+              if (deleteMethod) deleteMethod(id);
             }
           };
 

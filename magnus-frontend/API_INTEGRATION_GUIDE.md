@@ -1,3 +1,26 @@
+### API Integration Guide (Foods & Products)
+
+This frontend is integrated with the JHipster backend under `magnus-backend` using JWT.
+
+Key service: `src/hooks/useApi.ts` which wraps `src/services/api.ts`.
+
+- Products
+  - GET: `/api/products` (paginated). Enum values are mapped to lowercase strings in the UI.
+  - POST/PUT: Category/unit values are transformed to uppercase enum names (e.g. `vegetables` -> `VEGETABLES`).
+  - Store is updated via `setProducts`, `addProduct`, `updateProduct`, `deleteProduct`.
+
+- Foods
+  - GET: `/api/food-items` returns list (not paginated). `category` is mapped from JHipster enums (APPETIZER/MAIN/DESSERT/BEVERAGE) to UI categories.
+  - POST/PUT: `allergens` and `dietaryInfo` are serialized as comma-separated strings per backend schema.
+
+Auth
+- On login, JWT is stored in `localStorage` under `VITE_JWT_STORAGE_KEY`.
+- `api.ts` attaches the Authorization header automatically if the token exists.
+
+Mocks
+- Mocks remain available but are disabled by default when API is reachable.
+- To force mocks for local demos, set `VITE_ENABLE_API_MOCKING=true` in `.env` (foods/products will prefill from mocks).
+
 # 🚀 Party Budget Bliss - API Integration Guide
 
 ## 📋 Table of Contents

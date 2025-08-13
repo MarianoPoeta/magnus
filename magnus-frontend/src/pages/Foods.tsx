@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -16,6 +16,7 @@ import {
   Clock
 } from 'lucide-react';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Food } from '../types/Food';
@@ -23,7 +24,8 @@ import { Food } from '../types/Food';
 // Foods page for managing food items
 const Foods: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUser, foods, deleteFood } = useStore();
+  const { currentUser, foods } = useStore();
+  const { loadFoods, createFood, updateFood, deleteFood } = useApi();
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -63,10 +65,19 @@ const Foods: React.FC = () => {
     setShowForm(true);
   };
 
-  const handleSave = () => {
-    // TODO: Implement save logic
-    setShowForm(false);
-    setEditingFood(null);
+  const handleSave = async (data: any) => {
+    try {
+      setIsLoading(true);
+      if (editingFood) {
+        await updateFood(editingFood.id, data);
+      } else {
+        await createFood(data);
+      }
+      setShowForm(false);
+      setEditingFood(null);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -82,15 +93,11 @@ const Foods: React.FC = () => {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      meat: 'bg-red-100 text-red-800',
-      seafood: 'bg-blue-100 text-blue-800',
-      vegetables: 'bg-green-100 text-green-800',
-      grains: 'bg-yellow-100 text-yellow-800',
-      dairy: 'bg-purple-100 text-purple-800',
-      fruits: 'bg-pink-100 text-pink-800',
+      main: 'bg-green-100 text-green-800',
+      appetizer: 'bg-yellow-100 text-yellow-800',
       beverages: 'bg-cyan-100 text-cyan-800',
-      spices: 'bg-orange-100 text-orange-800',
       desserts: 'bg-indigo-100 text-indigo-800',
+      special: 'bg-purple-100 text-purple-800',
       other: 'bg-slate-100 text-slate-800'
     };
     return colors[category] || colors.other;
@@ -98,26 +105,26 @@ const Foods: React.FC = () => {
 
   const getCategoryLabel = (category: string) => {
     const labels: Record<string, string> = {
-      meat: 'Carnes',
-      seafood: 'Mariscos',
-      vegetables: 'Vegetales',
-      grains: 'Granos',
-      dairy: 'Lácteos',
-      fruits: 'Frutas',
+      main: 'Plato Principal',
+      appetizer: 'Entrada',
       beverages: 'Bebidas',
-      spices: 'Especias',
       desserts: 'Postres',
+      special: 'Especial',
       other: 'Otros'
     };
     return labels[category] || category;
   };
 
-  const filteredFoods = foods.filter(food => {
+  useEffect(() => {
+    loadFoods().catch(() => {});
+  }, [loadFoods]);
+
+  const filteredFoods = useMemo(() => foods.filter(food => {
     const matchesSearch = food.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          food.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || food.category === categoryFilter;
     return matchesSearch && matchesCategory;
-  });
+  }), [foods, searchTerm, categoryFilter]);
 
   if (showForm) {
     return <FoodForm food={editingFood} onSave={handleSave} onCancel={handleCancel} />;
@@ -223,15 +230,11 @@ const Foods: React.FC = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas las Categorías</SelectItem>
-                <SelectItem value="meat">Carnes</SelectItem>
-                <SelectItem value="seafood">Mariscos</SelectItem>
-                <SelectItem value="vegetables">Vegetales</SelectItem>
-                <SelectItem value="grains">Granos</SelectItem>
-                <SelectItem value="dairy">Lácteos</SelectItem>
-                <SelectItem value="fruits">Frutas</SelectItem>
+                <SelectItem value="main">Plato Principal</SelectItem>
+                <SelectItem value="appetizer">Entrada</SelectItem>
                 <SelectItem value="beverages">Bebidas</SelectItem>
-                <SelectItem value="spices">Especias</SelectItem>
                 <SelectItem value="desserts">Postres</SelectItem>
+                <SelectItem value="special">Especial</SelectItem>
                 <SelectItem value="other">Otros</SelectItem>
               </SelectContent>
             </Select>
@@ -321,7 +324,7 @@ const Foods: React.FC = () => {
                     {/* Price and Unit */}
                     <div className="text-center p-3 bg-slate-50 rounded-lg">
                       <div className="text-2xl font-bold text-slate-900">
-                        ${food.pricePerUnit.toLocaleString()}
+                        ${((food.basePrice ?? food.pricePerUnit ?? food.pricePerGuest) ?? 0).toLocaleString()}
                       </div>
                       <div className="text-sm text-slate-600">por {food.unit}</div>
                     </div>
@@ -387,33 +390,107 @@ const Foods: React.FC = () => {
   );
 };
 
-// Placeholder for FoodForm component
-const FoodForm: React.FC<{ food: Food | null; onSave: () => void; onCancel: () => void }> = ({ 
-  food, 
-  onSave, 
-  onCancel 
-}) => {
+// Inline FoodForm simplified for CRUD
+const FoodForm: React.FC<{ food: Food | null; onSave: (data: any) => void; onCancel: () => void }> = ({ food, onSave, onCancel }) => {
+  const [form, setForm] = useState<any>({
+    name: food?.name || '',
+    description: food?.description || '',
+    category: food?.category || 'main',
+    unit: food?.unit || 'unit',
+    basePrice: food?.basePrice ?? food?.pricePerUnit ?? food?.pricePerGuest ?? 0,
+    guestsPerUnit: food?.guestsPerUnit ?? 1,
+    maxUnits: food?.maxUnits,
+    allergens: food?.allergens || [],
+    dietaryInfo: food?.dietaryInfo || [],
+    isActive: food?.isActive ?? true,
+  });
+
+  const [allergenInput, setAllergenInput] = useState('');
+  const [dietaryInput, setDietaryInput] = useState('');
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">
-          {food ? 'Editar Comida' : 'Nueva Comida'}
-        </h1>
+        <h1 className="text-2xl font-bold text-slate-900">{food ? 'Editar Comida' : 'Nueva Comida'}</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button onClick={onSave}>
-            Guardar
-          </Button>
+          <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+          <Button onClick={() => onSave(form)}>Guardar</Button>
         </div>
       </div>
-      
+
       <Card>
-        <CardContent className="p-6">
-          <div className="text-center py-8">
-            <ChefHat className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-            <p className="text-slate-600">Formulario de comida en desarrollo...</p>
+        <CardContent className="p-6 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm text-slate-600">Nombre</label>
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </div>
+            <div>
+              <label className="text-sm text-slate-600">Categoría</label>
+              <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="main">Plato Principal</SelectItem>
+                  <SelectItem value="appetizer">Entrada</SelectItem>
+                  <SelectItem value="desserts">Postre</SelectItem>
+                  <SelectItem value="beverages">Bebidas</SelectItem>
+                  <SelectItem value="other">Otros</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-sm text-slate-600">Precio Base</label>
+              <Input type="number" value={form.basePrice} onChange={(e) => setForm({ ...form, basePrice: parseFloat(e.target.value) || 0 })} />
+            </div>
+            <div>
+              <label className="text-sm text-slate-600">Unidad</label>
+              <Input value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} />
+            </div>
+            <div>
+              <label className="text-sm text-slate-600">Huéspedes por unidad</label>
+              <Input type="number" value={form.guestsPerUnit} onChange={(e) => setForm({ ...form, guestsPerUnit: parseInt(e.target.value) || 1 })} />
+            </div>
+            <div>
+              <label className="text-sm text-slate-600">Máx. Unidades</label>
+              <Input type="number" value={form.maxUnits ?? ''} onChange={(e) => setForm({ ...form, maxUnits: e.target.value ? parseInt(e.target.value) : undefined })} />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm text-slate-600">Descripción</label>
+            <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm text-slate-600">Alérgenos</label>
+            <div className="flex gap-2">
+              <Input value={allergenInput} onChange={(e) => setAllergenInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (allergenInput.trim()) { setForm({ ...form, allergens: [...form.allergens, allergenInput.trim()] }); setAllergenInput(''); } } }} />
+              <Button type="button" onClick={() => { if (allergenInput.trim()) { setForm({ ...form, allergens: [...form.allergens, allergenInput.trim()] }); setAllergenInput(''); } }}>Agregar</Button>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {form.allergens.map((a: string, i: number) => (
+                <Badge key={i} variant="destructive" onClick={() => setForm({ ...form, allergens: form.allergens.filter((x: string) => x !== a) })}>
+                  {a}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm text-slate-600">Información dietética</label>
+            <div className="flex gap-2">
+              <Input value={dietaryInput} onChange={(e) => setDietaryInput(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (dietaryInput.trim()) { setForm({ ...form, dietaryInfo: [...form.dietaryInfo, dietaryInput.trim()] }); setDietaryInput(''); } } }} />
+              <Button type="button" onClick={() => { if (dietaryInput.trim()) { setForm({ ...form, dietaryInfo: [...form.dietaryInfo, dietaryInput.trim()] }); setDietaryInput(''); } }}>Agregar</Button>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {form.dietaryInfo.map((d: string, i: number) => (
+                <Badge key={i} variant="secondary" onClick={() => setForm({ ...form, dietaryInfo: form.dietaryInfo.filter((x: string) => x !== d) })}>
+                  {d}
+                </Badge>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

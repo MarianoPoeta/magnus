@@ -331,7 +331,23 @@ export const useApi = () => {
     
     try {
       const response = await apiServices.products.getProducts(params);
-      store.setProducts(response.data);
+      // Map backend enums to frontend shapes
+      const mapped = (response.data || []).map((p: any) => ({
+        id: String(p.id),
+        name: p.name,
+        description: p.description,
+        category: String(p.category || 'OTHER').toLowerCase(),
+        unit: String(p.unit || 'UNITS').toLowerCase(),
+        pricePerUnit: Number(p.pricePerUnit ?? 0),
+        estimatedPrice: Number(p.pricePerUnit ?? 0),
+        cost: Number(p.pricePerUnit ?? 0),
+        supplier: p.supplier,
+        notes: p.supplierContact,
+        isActive: !!p.isActive,
+        createdAt: p.createdAt,
+        updatedAt: p.updatedAt,
+      }));
+      store.setProducts(mapped as any);
       return response;
     } catch (error) {
       handleError(error as ApiError);
@@ -346,9 +362,56 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.products.createProduct(productData);
-      store.addProduct(response as any);
-      return response;
+      // Ensure backend enum and required fields
+      const toBackend = async () => {
+        const category = String(productData.category || 'other').toUpperCase();
+        const unit = String(productData.unit || 'units').toUpperCase();
+        // Resolve AppUser for createdBy if backend requires it
+        let createdBy: any = undefined;
+        try {
+          const currentEmail = (store.currentUser as any)?.email;
+          if (currentEmail) {
+            const appUsersResp = await apiServices.appUsers.getAppUsers({ size: 1000 });
+            const match = (appUsersResp.data || []).find((u: any) => u.email?.toLowerCase() === currentEmail.toLowerCase() || u.login?.toLowerCase() === (store.currentUser as any)?.name?.toLowerCase());
+            if (match?.id != null) createdBy = { id: match.id };
+          }
+        } catch {}
+        return {
+          name: productData.name,
+          description: productData.description,
+          category,
+          unit,
+          pricePerUnit: Number(productData.pricePerUnit ?? productData.estimatedPrice ?? productData.cost ?? 0),
+          minOrderQuantity: productData.minOrderQuantity,
+          maxOrderQuantity: productData.maxOrderQuantity,
+          supplier: productData.supplier,
+          supplierContact: productData.notes,
+          isActive: productData.isActive ?? true,
+          createdAt: productData.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          ...(createdBy ? { createdBy } : {}),
+        };
+      };
+      const payload = await toBackend();
+      const response = await apiServices.products.createProduct(payload);
+      // Map back to frontend shape
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        category: String((response as any).category || 'other').toLowerCase(),
+        unit: String((response as any).unit || 'units').toLowerCase(),
+        pricePerUnit: Number((response as any).pricePerUnit ?? 0),
+        estimatedPrice: Number((response as any).pricePerUnit ?? 0),
+        cost: Number((response as any).pricePerUnit ?? 0),
+        supplier: (response as any).supplier,
+        notes: (response as any).supplierContact,
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.addProduct(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -362,9 +425,39 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.products.updateProduct({ ...productData, id });
-      store.updateProduct(response as any);
-      return response;
+      const payload = {
+        id: Number(id),
+        name: productData.name,
+        description: productData.description,
+        category: String(productData.category || 'other').toUpperCase(),
+        unit: String(productData.unit || 'units').toUpperCase(),
+        pricePerUnit: Number(productData.pricePerUnit ?? productData.estimatedPrice ?? productData.cost ?? 0),
+        minOrderQuantity: productData.minOrderQuantity,
+        maxOrderQuantity: productData.maxOrderQuantity,
+        supplier: productData.supplier,
+        supplierContact: productData.notes,
+        isActive: productData.isActive ?? true,
+        createdAt: productData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.products.updateProduct(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        category: String((response as any).category || 'other').toLowerCase(),
+        unit: String((response as any).unit || 'units').toLowerCase(),
+        pricePerUnit: Number((response as any).pricePerUnit ?? 0),
+        estimatedPrice: Number((response as any).pricePerUnit ?? 0),
+        cost: Number((response as any).pricePerUnit ?? 0),
+        supplier: (response as any).supplier,
+        notes: (response as any).supplierContact,
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.updateProduct(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -378,8 +471,175 @@ export const useApi = () => {
     clearError();
     
     try {
-      await apiServices.products.deleteProduct(id);
+      await apiServices.products.deleteProduct(Number(id) as any);
       store.deleteProduct(id);
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  // Food Management
+  const loadFoods = useCallback(async () => {
+    setIsLoading(true);
+    clearError();
+    try {
+      const response = await apiServices.foodItems.getFoodItems();
+      const mapped = (response as any[]).map((f: any) => {
+        const cat = String(f.category || 'MAIN').toUpperCase();
+        const category =
+          cat === 'BEVERAGE' ? 'beverages' :
+          cat === 'DESSERT' ? 'desserts' :
+          cat === 'APPETIZER' ? 'appetizer' :
+          cat === 'SPECIAL' ? 'special' :
+          'main';
+        return {
+          id: String(f.id),
+          name: f.name,
+          description: f.description,
+          category,
+          basePrice: Number(f.basePrice ?? 0),
+          pricePerUnit: Number(f.basePrice ?? 0),
+          pricePerGuest: Number(f.basePrice ?? 0),
+          unit: f.servingSize || 'unit',
+          guestsPerUnit: Number(f.guestsPerUnit ?? 1),
+          maxUnits: f.maxUnits ?? undefined,
+          allergens: (f.allergens || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+          dietaryInfo: (f.dietaryInfo || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+          isActive: !!f.isActive,
+          createdAt: f.createdAt,
+          updatedAt: f.updatedAt,
+        };
+      });
+      store.setFoods(mapped as any);
+      return mapped;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const createFood = useCallback(async (foodData: any) => {
+    setIsLoading(true);
+    clearError();
+    try {
+      const category = String(foodData.category || 'other').toLowerCase();
+      const backendCategory =
+        category === 'beverages' ? 'BEVERAGE' :
+        category === 'desserts' ? 'DESSERT' :
+        category === 'appetizer' ? 'APPETIZER' :
+        category === 'special' ? 'SPECIAL' :
+        'MAIN';
+      const payload = {
+        name: foodData.name,
+        description: foodData.description,
+        category: backendCategory,
+        basePrice: Number(foodData.basePrice ?? foodData.pricePerUnit ?? foodData.pricePerGuest ?? 0),
+        baseCost: Number(foodData.baseCost ?? 0),
+        servingSize: foodData.unit || 'unit',
+        guestsPerUnit: Number(foodData.guestsPerUnit ?? 1),
+        maxUnits: foodData.maxUnits ?? undefined,
+        allergens: (foodData.allergens || []).join(', '),
+        dietaryInfo: (foodData.dietaryInfo || []).join(', '),
+        isActive: foodData.isActive ?? true,
+        isTemplate: false,
+        createdAt: foodData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.foodItems.createFoodItem(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        category: category,
+        basePrice: Number((response as any).basePrice ?? 0),
+        pricePerUnit: Number((response as any).basePrice ?? 0),
+        pricePerGuest: Number((response as any).basePrice ?? 0),
+        unit: (response as any).servingSize || 'unit',
+        guestsPerUnit: Number((response as any).guestsPerUnit ?? 1),
+        maxUnits: (response as any).maxUnits ?? undefined,
+        allergens: ((response as any).allergens || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        dietaryInfo: ((response as any).dietaryInfo || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.addFood(mapped);
+      return mapped;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const updateFood = useCallback(async (id: string, foodData: any) => {
+    setIsLoading(true);
+    clearError();
+    try {
+      const category = String(foodData.category || 'other').toLowerCase();
+      const backendCategory =
+        category === 'beverages' ? 'BEVERAGE' :
+        category === 'desserts' ? 'DESSERT' :
+        category === 'appetizer' ? 'APPETIZER' :
+        category === 'special' ? 'SPECIAL' :
+        'MAIN';
+      const payload = {
+        id: Number(id),
+        name: foodData.name,
+        description: foodData.description,
+        category: backendCategory,
+        basePrice: Number(foodData.basePrice ?? foodData.pricePerUnit ?? foodData.pricePerGuest ?? 0),
+        baseCost: Number(foodData.baseCost ?? 0),
+        servingSize: foodData.unit || 'unit',
+        guestsPerUnit: Number(foodData.guestsPerUnit ?? 1),
+        maxUnits: foodData.maxUnits ?? undefined,
+        allergens: (foodData.allergens || []).join(', '),
+        dietaryInfo: (foodData.dietaryInfo || []).join(', '),
+        isActive: foodData.isActive ?? true,
+        isTemplate: false,
+        createdAt: foodData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.foodItems.updateFoodItem(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        category: category,
+        basePrice: Number((response as any).basePrice ?? 0),
+        pricePerUnit: Number((response as any).basePrice ?? 0),
+        pricePerGuest: Number((response as any).basePrice ?? 0),
+        unit: (response as any).servingSize || 'unit',
+        guestsPerUnit: Number((response as any).guestsPerUnit ?? 1),
+        maxUnits: (response as any).maxUnits ?? undefined,
+        allergens: ((response as any).allergens || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        dietaryInfo: ((response as any).dietaryInfo || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.updateFood(mapped);
+      return mapped;
+    } catch (error) {
+      handleError(error as ApiError);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [store, handleError, clearError]);
+
+  const deleteFood = useCallback(async (id: string) => {
+    setIsLoading(true);
+    clearError();
+    try {
+      await apiServices.foodItems.deleteFoodItem(Number(id) as any);
+      store.deleteFood(id);
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -586,6 +846,7 @@ export const useApi = () => {
             loadActivities(),
             loadAccommodations(),
             loadMenus(),
+            loadFoods(),
             loadProducts(),
             loadTransports(),
             loadTasks(),
@@ -598,7 +859,7 @@ export const useApi = () => {
     };
 
     initializeData();
-  }, [loadBudgets, loadActivities, loadAccommodations, loadMenus, loadProducts, loadTransports, loadTasks, loadNotifications, store.currentUser]);
+  }, [loadBudgets, loadActivities, loadAccommodations, loadMenus, loadFoods, loadProducts, loadTransports, loadTasks, loadNotifications, store.currentUser]);
 
   return {
     // State
@@ -639,6 +900,12 @@ export const useApi = () => {
     createProduct,
     updateProduct,
     deleteProduct,
+
+    // Food Management
+    loadFoods,
+    createFood,
+    updateFood,
+    deleteFood,
     
     // Transport Management
     loadTransports,

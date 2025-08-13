@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Layout is provided by the router; do not wrap here
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -18,11 +18,13 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import { TransportTemplate } from '../types/Budget';
 
 const Transports: React.FC = () => {
   const navigate = useNavigate();
-  const { transportTemplates, addTransportTemplate, updateTransportTemplate, deleteTransportTemplate } = useStore();
+  const { transportTemplates } = useStore();
+  const { loadTransports, createTransport, updateTransport, deleteTransport } = useApi();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -74,7 +76,7 @@ const Transports: React.FC = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const transportData: TransportTemplate = {
       id: editingTransport?.id || `t${Date.now()}`,
       name: formData.name,
@@ -87,9 +89,9 @@ const Transports: React.FC = () => {
     };
 
     if (editingTransport) {
-      updateTransportTemplate(transportData);
+      await updateTransport(String(editingTransport.id), transportData as any);
     } else {
-      addTransportTemplate(transportData);
+      await createTransport(transportData as any);
     }
 
     setIsCreating(false);
@@ -119,9 +121,9 @@ const Transports: React.FC = () => {
     });
   };
 
-  const handleDelete = (transportId: string) => {
+  const handleDelete = async (transportId: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar este transporte?')) {
-      deleteTransportTemplate(transportId);
+      await deleteTransport(transportId);
     }
   };
 
@@ -144,6 +146,8 @@ const Transports: React.FC = () => {
   const getVehicleTypeLabel = (type: string) => {
     return vehicleTypes.find(vt => vt.value === type)?.label || type;
   };
+
+  useEffect(() => { loadTransports().catch(() => {}); }, [loadTransports]);
 
   return (
       <div className="space-y-6">

@@ -8,6 +8,7 @@ export interface Food {
   description?: string;
   category?: string;
   pricePerUnit?: number; // Legacy field - use pricePerGuest instead
+  basePrice?: number; // New API field; prefer this when available
   unit?: string;
   allergens?: string[]; // Common allergens like 'gluten', 'dairy', 'nuts', 'eggs', 'soy', 'fish', 'shellfish'
   dietaryInfo?: string[]; // 'vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'keto', 'paleo'
