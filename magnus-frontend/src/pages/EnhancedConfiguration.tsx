@@ -158,6 +158,22 @@ const EnhancedConfiguration: React.FC = () => {
   };
 
   // Enhanced UI components
+  const mapTabToType = (tab: string): 'accommodation' | 'menu' | 'food' | 'product' | 'transport' => {
+    switch (tab) {
+      case 'accommodations':
+        return 'accommodation';
+      case 'menus':
+        return 'menu';
+      case 'foods':
+        return 'food';
+      case 'products':
+        return 'product';
+      case 'transports':
+        return 'transport';
+      default:
+        return 'accommodation';
+    }
+  };
   const TabHeader = ({ title, subtitle, count, onCreateNew }: {
     title: string;
     subtitle: string;
@@ -660,7 +676,7 @@ const EnhancedConfiguration: React.FC = () => {
           icon={config.icon}
           title={config.title}
           subtitle={config.subtitle}
-          onCreateNew={() => handleCreateNew(activeTab as any)}
+          onCreateNew={() => handleCreateNew(mapTabToType(activeTab))}
         />
       );
     }
@@ -674,7 +690,7 @@ const EnhancedConfiguration: React.FC = () => {
         {filteredData.map((item) => {
           const cardProps = {
             onEdit: (editItem: ConfigurationItem) => {
-              handleEdit(activeTab as any, editItem);
+              handleEdit(mapTabToType(activeTab), editItem);
             },
             onDelete: (id: string) => {
               const deleteMethod = {

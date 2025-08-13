@@ -37,6 +37,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useBudgetWorkflow } from '../../hooks/useBudgetWorkflow';
 import { useBudgetCalculation } from '../../hooks/useBudgetCalculation';
 import { useStore } from '../../store';
+import { Client } from '../../types/Client';
 import { Menu, MenuItem } from '../../types/Menu';
 import { Activity } from '../../types/Activity';
 import { Accommodation } from '../../types/Accommodation';
@@ -79,6 +80,9 @@ const UnifiedBudgetCreator: React.FC<UnifiedBudgetCreatorProps> = ({
   });
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
+  const [newClientForm, setNewClientForm] = useState<{ name: string; email: string; phone: string }>({ name: '', email: '', phone: '' });
 
   // Get data from store
   const { 
@@ -86,6 +90,8 @@ const UnifiedBudgetCreator: React.FC<UnifiedBudgetCreatorProps> = ({
     activities, 
     accommodations, 
     transportTemplates,
+    clients,
+    addClient,
     findOrCreateClient,
     addToast 
   } = useStore();
@@ -301,6 +307,56 @@ const UnifiedBudgetCreator: React.FC<UnifiedBudgetCreatorProps> = ({
       <Card>
         <CardContent className="p-6 space-y-6">
           <div className="space-y-6">
+            {/* Existing Client Selector */}
+            <div>
+              <h3 className="text-lg font-medium text-slate-900 mb-4">Cliente</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-slate-700">Seleccionar cliente existente</Label>
+                  <Select
+                    value={selectedClientId || ''}
+                    onValueChange={(value) => {
+                      const id = value || null;
+                      setSelectedClientId(id);
+                      const client = clients.find((c: Client) => c.id === id);
+                      if (client) {
+                        updateBudgetField('clientName', client.name);
+                        updateBudgetField('clientEmail', client.email);
+                        updateBudgetField('clientPhone', client.phone);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="Buscar o seleccionar cliente" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {(clients as Client[]).map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name} — {c.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setSelectedClientId(null);
+                      updateBudgetField('clientName', '');
+                      updateBudgetField('clientEmail', '');
+                      updateBudgetField('clientPhone', '');
+                    }}
+                  >
+                    Limpiar selección
+                  </Button>
+                  <Button type="button" onClick={() => setIsClientDialogOpen(true)} className="bg-green-600 hover:bg-green-700">
+                    <Plus className="h-4 w-4 mr-1" /> Nuevo cliente
+                  </Button>
+                </div>
+              </div>
+            </div>
             {/* Client Contact Information */}
             <div>
               <h3 className="text-lg font-medium text-slate-900 mb-4">Datos de Contacto</h3>
@@ -865,6 +921,73 @@ const UnifiedBudgetCreator: React.FC<UnifiedBudgetCreatorProps> = ({
                 }
               }}>
                 Añadir Template Personalizado
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* New Client Dialog */}
+      <Dialog open={isClientDialogOpen} onOpenChange={setIsClientDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Crear nuevo cliente</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Nombre completo</Label>
+              <Input
+                value={newClientForm.name}
+                onChange={(e) => setNewClientForm({ ...newClientForm, name: e.target.value })}
+                placeholder="Juan Pérez"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={newClientForm.email}
+                onChange={(e) => setNewClientForm({ ...newClientForm, email: e.target.value })}
+                placeholder="juan@email.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Teléfono</Label>
+              <Input
+                value={newClientForm.phone}
+                onChange={(e) => setNewClientForm({ ...newClientForm, phone: e.target.value })}
+                placeholder="+54 11 1234-5678"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsClientDialogOpen(false)}>Cancelar</Button>
+              <Button
+                onClick={() => {
+                  const { name, email, phone } = newClientForm;
+                  if (!name || !email || !phone) {
+                    addToast({ id: `client-missing-${Date.now()}`, message: 'Completa nombre, email y teléfono', type: 'error' });
+                    return;
+                  }
+                  const client: Client = {
+                    id: `client-${Date.now()}`,
+                    name,
+                    email,
+                    phone,
+                    isActive: true,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  };
+                  addClient(client);
+                  setSelectedClientId(client.id);
+                  updateBudgetField('clientName', client.name);
+                  updateBudgetField('clientEmail', client.email);
+                  updateBudgetField('clientPhone', client.phone);
+                  setIsClientDialogOpen(false);
+                  setNewClientForm({ name: '', email: '', phone: '' });
+                  addToast({ id: `client-created-${Date.now()}`, message: `Cliente ${client.name} creado`, type: 'success' });
+                }}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                Guardar Cliente
               </Button>
             </div>
           </div>
