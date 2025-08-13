@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 import { Plus, Edit, Trash2, Package, UtensilsCrossed, MapPin, Users, DollarSign, AlertTriangle, CheckCircle, Settings, Database, FileText, Save } from 'lucide-react';
 import { useStore } from '../store';
+import { useApi } from '../hooks/useApi';
 import { Product, ProductRequirement } from '../types/Product';
 import { Activity } from '../types/Activity';
 import { Menu } from '../types/Menu';
@@ -25,20 +26,8 @@ const AdminConfig: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
-  const { 
-    products, 
-    addProduct, 
-    updateProduct, 
-    deleteProduct,
-    activities,
-    addActivity,
-    updateActivity,
-    deleteActivity,
-    menus,
-    addMenu,
-    updateMenu,
-    deleteMenu
-  } = useStore();
+  const { products } = useStore();
+  const { loadProducts, createProduct, updateProduct, deleteProduct } = useApi();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -65,9 +54,9 @@ const AdminConfig: React.FC = () => {
       };
 
       if (editingProduct) {
-        updateProduct(productData);
+        await updateProduct(String(editingProduct.id), productData as any);
       } else {
-        addProduct(productData);
+        await createProduct(productData as any);
       }
 
       setShowSuccess(true);
@@ -111,7 +100,7 @@ const AdminConfig: React.FC = () => {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
       setIsLoading(true);
       try {
-        deleteProduct(productId);
+        await deleteProduct(productId);
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       } catch (error) {
@@ -121,6 +110,8 @@ const AdminConfig: React.FC = () => {
       }
     }
   };
+
+  React.useEffect(() => { loadProducts().catch(() => {}); }, [loadProducts]);
 
   const categoryColors = {
     meat: 'bg-red-50 text-red-700 border-red-200',

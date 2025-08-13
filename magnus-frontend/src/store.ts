@@ -16,8 +16,9 @@ import { mockMenus } from './mock/mockMenus';
 import { mockFoodItems } from './mock/mockFoodItems';
 import { mockProducts } from './mock/mockProducts';
 
-// Development flag - set to true to enable session persistence (Vite)
+// Development flag
 const isDevelopment = import.meta.env.MODE === 'development';
+const enableApiMocking = (import.meta as any).env?.VITE_ENABLE_API_MOCKING === 'true';
 
 export interface Notification {
   id: number;
@@ -568,7 +569,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Food Management
-      foods: mockFoodItems,
+      foods: enableApiMocking ? mockFoodItems : [],
       setFoods: (foods: Food[]) => set({ foods }),
       addFood: (food: Food) => {
         set((state) => ({ foods: [...state.foods, food] }));
@@ -585,7 +586,7 @@ export const useStore = create<StoreState>()(
       },
       
       // Product Management
-      products: mockProductsData,
+      products: enableApiMocking ? mockProductsData : [],
       setProducts: (products: Product[]) => set({ products }),
       addProduct: (product: Product) => {
         set((state) => ({ products: [...state.products, product] }));

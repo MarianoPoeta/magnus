@@ -102,6 +102,16 @@ yarn dev
 
 The frontend will start on: **http://localhost:5173** (or another available port)
 
+### 🐳 Docker (Dev)
+
+From repository root:
+
+```
+docker compose -f docker-compose.dev.yml up --build
+```
+
+This brings up MySQL, the backend (dev) and Vite (5173). Update your `.env` in the frontend if needed to point to `http://localhost:8080/api`.
+
 ## 🔐 Authentication Setup
 
 ### Default JHipster Users

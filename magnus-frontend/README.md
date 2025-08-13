@@ -71,3 +71,17 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## Docker
+
+Dev hot-reload:
+```
+docker build -f Dockerfile.dev -t magnus-frontend-dev .
+docker run --rm -it -p 5173:5173 -e VITE_API_URL=http://localhost:8080/api -v %cd%:/app -v /app/node_modules magnus-frontend-dev
+```
+
+Prod build:
+```
+docker build -t magnus-frontend:latest .
+docker run --rm -it -p 8081:80 magnus-frontend:latest
+```

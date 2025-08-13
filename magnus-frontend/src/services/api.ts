@@ -250,6 +250,18 @@ export const userService = {
   },
 };
 
+// App Users (domain users for createdBy links)
+export const appUserService = {
+  async getAppUsers(params?: { page?: number; size?: number; sort?: string }) {
+    const queryParams = new URLSearchParams();
+    if (params?.page !== undefined) queryParams.append('page', params.page.toString());
+    if (params?.size !== undefined) queryParams.append('size', params.size.toString());
+    if (params?.sort) queryParams.append('sort', params.sort);
+    const response = await apiClient.get<any>(`/app-users?${queryParams}`);
+    return convertPaginatedResponse(response);
+  },
+};
+
 // Budget Management Service (JHipster format)
 export const budgetService = {
   async getBudgets(params?: { page?: number; size?: number; sort?: string }) {
@@ -484,34 +496,7 @@ export const clientService = {
   },
 };
 
-// App User Management Service (Custom users)
-export const appUserService = {
-  async getAppUsers(params?: { page?: number; size?: number; sort?: string }) {
-    const queryParams = new URLSearchParams();
-    if (params?.page !== undefined) queryParams.append('page', params.page.toString());
-    if (params?.size !== undefined) queryParams.append('size', params.size.toString());
-    if (params?.sort) queryParams.append('sort', params.sort);
-    
-    const response = await apiClient.get<any>(`/app-users?${queryParams}`);
-    return convertPaginatedResponse(response);
-  },
-
-  async getAppUserById(id: number) {
-    return apiClient.get<any>(`/app-users/${id}`);
-  },
-
-  async createAppUser(appUserData: any) {
-    return apiClient.post<any>('/app-users', appUserData);
-  },
-
-  async updateAppUser(appUserData: any) {
-    return apiClient.put<any>(`/app-users/${appUserData.id}`, appUserData);
-  },
-
-  async deleteAppUser(id: number) {
-    return apiClient.delete(`/app-users/${id}`);
-  },
-};
+// App User Management Service (Custom users) - duplicate removed (see earlier definition)
 
 // Notification Management Service
 export const notificationService = {

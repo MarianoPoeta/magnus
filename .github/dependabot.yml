@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/magnus-backend"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/magnus-frontend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
