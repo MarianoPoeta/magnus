@@ -203,7 +203,21 @@ export const useApi = () => {
     
     try {
       const response = await apiServices.accommodations.getAccommodations(params);
-      store.setAccommodations(response.data);
+      const mapped = (response.data || []).map((a: any) => ({
+        id: String(a.id),
+        name: a.name,
+        description: a.description,
+        roomType: String(a.type || 'DOUBLE').toLowerCase(),
+        pricePerNight: Number(a.pricePerNight ?? 0),
+        costPerNight: Number(a.costPerNight ?? 0),
+        maxCapacity: Number(a.maxOccupancy ?? 0),
+        address: a.address,
+        amenities: a.amenities ? a.amenities.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+        isActive: !!a.isActive,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
+      }));
+      store.setAccommodations(mapped as any);
       return response;
     } catch (error) {
       handleError(error as ApiError);
@@ -218,9 +232,41 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.accommodations.createAccommodation(accommodationData);
-      store.addAccommodation(response as any);
-      return response;
+      const payload = {
+        name: accommodationData.name,
+        description: accommodationData.description,
+        type: String(accommodationData.roomType || 'double').toUpperCase(),
+        pricePerNight: Number(accommodationData.pricePerNight ?? 0),
+        costPerNight: Number(accommodationData.costPerNight ?? 0),
+        maxOccupancy: Number(accommodationData.maxCapacity ?? 1),
+        address: accommodationData.address,
+        amenities: (accommodationData.amenities || []).join(', '),
+        checkInTime: accommodationData.checkInTime,
+        checkOutTime: accommodationData.checkOutTime,
+        rating: accommodationData.rating,
+        contactInfo: accommodationData.contactInfo,
+        isActive: accommodationData.isActive ?? true,
+        isTemplate: false,
+        createdAt: accommodationData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.accommodations.createAccommodation(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        roomType: String((response as any).type || 'DOUBLE').toLowerCase(),
+        pricePerNight: Number((response as any).pricePerNight ?? 0),
+        costPerNight: Number((response as any).costPerNight ?? 0),
+        maxCapacity: Number((response as any).maxOccupancy ?? 0),
+        address: (response as any).address,
+        amenities: ((response as any).amenities || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.addAccommodation(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -234,9 +280,42 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.accommodations.updateAccommodation({ ...accommodationData, id });
-      store.updateAccommodation(response as any);
-      return response;
+      const payload = {
+        id: Number(id),
+        name: accommodationData.name,
+        description: accommodationData.description,
+        type: String(accommodationData.roomType || 'double').toUpperCase(),
+        pricePerNight: Number(accommodationData.pricePerNight ?? 0),
+        costPerNight: Number(accommodationData.costPerNight ?? 0),
+        maxOccupancy: Number(accommodationData.maxCapacity ?? 1),
+        address: accommodationData.address,
+        amenities: (accommodationData.amenities || []).join(', '),
+        checkInTime: accommodationData.checkInTime,
+        checkOutTime: accommodationData.checkOutTime,
+        rating: accommodationData.rating,
+        contactInfo: accommodationData.contactInfo,
+        isActive: accommodationData.isActive ?? true,
+        isTemplate: false,
+        createdAt: accommodationData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.accommodations.updateAccommodation(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        roomType: String((response as any).type || 'DOUBLE').toLowerCase(),
+        pricePerNight: Number((response as any).pricePerNight ?? 0),
+        costPerNight: Number((response as any).costPerNight ?? 0),
+        maxCapacity: Number((response as any).maxOccupancy ?? 0),
+        address: (response as any).address,
+        amenities: ((response as any).amenities || '').split(',').map((s: string) => s.trim()).filter(Boolean),
+        isActive: !!(response as any).isActive,
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.updateAccommodation(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -267,7 +346,23 @@ export const useApi = () => {
     
     try {
       const response = await apiServices.menus.getMenus(params);
-      store.setMenus(response.data);
+      const mapped = (response.data || []).map((m: any) => ({
+        id: String(m.id),
+        name: m.name,
+        description: m.description,
+        type: String(m.type || 'DINNER').toLowerCase(),
+        pricePerPerson: Number(m.pricePerPerson ?? 0),
+        costPerPerson: Number(m.costPerPerson ?? 0),
+        minPeople: Number(m.minPeople ?? 1),
+        maxPeople: Number(m.maxPeople ?? 1),
+        restaurant: m.restaurant,
+        preparationTime: m.preparationTime ?? 0,
+        isActive: !!m.isActive,
+        selectedFoods: (m.includedFoodItems || []).map((fi: any) => String(fi.id)),
+        createdAt: m.createdAt,
+        updatedAt: m.updatedAt,
+      }));
+      store.setMenus(mapped as any);
       return response;
     } catch (error) {
       handleError(error as ApiError);
@@ -282,9 +377,42 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.menus.createMenu(menuData);
-      store.addMenu(response as any);
-      return response;
+      const payload = {
+        name: menuData.name,
+        description: menuData.description,
+        type: String(menuData.type || 'dinner').toUpperCase(),
+        pricePerPerson: Number(menuData.pricePerPerson ?? 0),
+        costPerPerson: Number(menuData.costPerPerson ?? 0),
+        minPeople: Number(menuData.minPeople ?? 1),
+        maxPeople: Number(menuData.maxPeople ?? 1),
+        restaurant: menuData.restaurant || '',
+        preparationTime: menuData.preparationTime ?? 0,
+        isActive: menuData.isActive ?? true,
+        isTemplate: false,
+        version: menuData.version ?? 1,
+        includedFoodItems: (menuData.selectedFoods || []).map((id: any) => ({ id: Number(id) })),
+        createdAt: menuData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.menus.createMenu(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        type: String((response as any).type || 'DINNER').toLowerCase(),
+        pricePerPerson: Number((response as any).pricePerPerson ?? 0),
+        costPerPerson: Number((response as any).costPerPerson ?? 0),
+        minPeople: Number((response as any).minPeople ?? 1),
+        maxPeople: Number((response as any).maxPeople ?? 1),
+        restaurant: (response as any).restaurant,
+        preparationTime: (response as any).preparationTime ?? 0,
+        isActive: !!(response as any).isActive,
+        selectedFoods: ((response as any).includedFoodItems || []).map((fi: any) => String(fi.id)),
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.addMenu(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
@@ -298,9 +426,43 @@ export const useApi = () => {
     clearError();
     
     try {
-      const response = await apiServices.menus.updateMenu({ ...menuData, id });
-      store.updateMenu(response as any);
-      return response;
+      const payload = {
+        id: Number(id),
+        name: menuData.name,
+        description: menuData.description,
+        type: String(menuData.type || 'dinner').toUpperCase(),
+        pricePerPerson: Number(menuData.pricePerPerson ?? 0),
+        costPerPerson: Number(menuData.costPerPerson ?? 0),
+        minPeople: Number(menuData.minPeople ?? 1),
+        maxPeople: Number(menuData.maxPeople ?? 1),
+        restaurant: menuData.restaurant || '',
+        preparationTime: menuData.preparationTime ?? 0,
+        isActive: menuData.isActive ?? true,
+        isTemplate: false,
+        version: menuData.version ?? 1,
+        includedFoodItems: (menuData.selectedFoods || []).map((id: any) => ({ id: Number(id) })),
+        createdAt: menuData.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      } as any;
+      const response = await apiServices.menus.updateMenu(payload);
+      const mapped = {
+        id: String((response as any).id),
+        name: (response as any).name,
+        description: (response as any).description,
+        type: String((response as any).type || 'DINNER').toLowerCase(),
+        pricePerPerson: Number((response as any).pricePerPerson ?? 0),
+        costPerPerson: Number((response as any).costPerPerson ?? 0),
+        minPeople: Number((response as any).minPeople ?? 1),
+        maxPeople: Number((response as any).maxPeople ?? 1),
+        restaurant: (response as any).restaurant,
+        preparationTime: (response as any).preparationTime ?? 0,
+        isActive: !!(response as any).isActive,
+        selectedFoods: ((response as any).includedFoodItems || []).map((fi: any) => String(fi.id)),
+        createdAt: (response as any).createdAt,
+        updatedAt: (response as any).updatedAt,
+      } as any;
+      store.updateMenu(mapped);
+      return mapped;
     } catch (error) {
       handleError(error as ApiError);
       throw error;
