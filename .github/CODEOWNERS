@@ -1,0 +1,6 @@
+# CODEOWNERS
+# Order matters; the last matching pattern takes the most precedence.
+*       @MarianoPoeta
+magnus-backend/ @MarianoPoeta
+magnus-frontend/ @MarianoPoeta
+.github/          @MarianoPoeta
