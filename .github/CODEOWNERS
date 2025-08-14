@@ -1,0 +1,6 @@
+# Code owners for automated review routing
+# Syntax: pattern  owners
+* @MarianoPoeta
+magnus-backend/ @MarianoPoeta
+magnus-frontend/ @MarianoPoeta
+.github/ @MarianoPoeta
