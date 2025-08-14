@@ -537,7 +537,9 @@ export const useApi = () => {
             const match = (appUsersResp.data || []).find((u: any) => u.email?.toLowerCase() === currentEmail.toLowerCase() || u.login?.toLowerCase() === (store.currentUser as any)?.name?.toLowerCase());
             if (match?.id != null) createdBy = { id: match.id };
           }
-        } catch {}
+        } catch (err) {
+          console.debug('createProduct: unable to resolve createdBy', err);
+        }
         return {
           name: productData.name,
           description: productData.description,

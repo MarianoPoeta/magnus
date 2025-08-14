@@ -33,27 +33,7 @@ const Foods: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingFood, setEditingFood] = useState<Food | null>(null);
 
-  // Check admin access
-  if (currentUser?.role !== 'admin') {
-    return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <Card className="w-full max-w-md">
-            <CardContent className="p-6 text-center">
-              <ChefHat className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-slate-900 mb-2">Acceso Restringido</h2>
-              <p className="text-slate-600 mb-4">
-                Solo los administradores pueden gestionar las comidas.
-              </p>
-              <Button onClick={() => navigate('/dashboard')}>
-                Volver al Dashboard
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+  const isAdmin = currentUser?.role === 'admin';
 
   const handleCreateNew = () => {
     setEditingFood(null);
@@ -135,6 +115,26 @@ const Foods: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Access gate */}
+      {!isAdmin ? (
+        <div className="container mx-auto p-6">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <Card className="w-full max-w-md">
+              <CardContent className="p-6 text-center">
+                <ChefHat className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                <h2 className="text-xl font-semibold text-slate-900 mb-2">Acceso Restringido</h2>
+                <p className="text-slate-600 mb-4">
+                  Solo los administradores pueden gestionar las comidas.
+                </p>
+                <Button onClick={() => navigate('/dashboard')}>
+                  Volver al Dashboard
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      ) : (
+      <>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -389,6 +389,9 @@ const Foods: React.FC = () => {
           </div>
         )}
       </div>
+      </>
+      )
+      }
     </div>
   );
 };

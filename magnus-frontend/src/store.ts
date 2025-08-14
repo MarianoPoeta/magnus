@@ -409,7 +409,7 @@ export const useStore = create<StoreState>()(
         const state = get();
         
         // Try to find existing client by email or phone
-        let existingClient = state.clients.find(
+        const existingClient = state.clients.find(
           c => c.email.toLowerCase() === clientData.email.toLowerCase() ||
                c.phone === clientData.phone
         );
