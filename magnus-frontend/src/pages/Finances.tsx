@@ -13,7 +13,6 @@ const Finances = () => {
           <p className="text-gray-500">Financial management coming soon...</p>
         </div>
       </div>
-    </div>
   );
 };
 

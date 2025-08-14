@@ -1,0 +1,28 @@
+name: ESLint (reviewdog)
+
+on:
+  pull_request:
+    paths:
+      - 'magnus-frontend/**'
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: magnus-frontend/package-lock.json
+      - name: Install
+        working-directory: magnus-frontend
+        run: npm ci
+      - name: Run ESLint with reviewdog
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: .
+          workdir: magnus-frontend
+          level: warning
