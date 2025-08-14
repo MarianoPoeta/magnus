@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magnus-mysql
+  namespace: magnus
+  labels:
+    app: magnus-mysql
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: magnus-mysql
+  template:
+    metadata:
+      labels:
+        app: magnus-mysql
+        tier: database
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-root-password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-database
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-root-password
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - mysqladmin
+            - ping
+            - -h
+            - localhost
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: magnus-mysql-pvc
+      - name: mysql-config
+        configMap:
+          name: magnus-mysql-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnus-mysql
+  namespace: magnus
+  labels:
+    app: magnus-mysql
+    tier: database
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: magnus-mysql
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: magnus-mysql-pvc
+  namespace: magnus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: magnus-mysql-config
+  namespace: magnus
+data:
+  my.cnf: |
+    [mysqld]
+    lower_case_table_names=1
+    skip-mysqlx
+    character_set_server=utf8mb4
+    explicit_defaults_for_timestamp
+    max_connections=200
+    innodb_buffer_pool_size=256M
+    innodb_log_file_size=64M
+    innodb_flush_log_at_trx_commit=2

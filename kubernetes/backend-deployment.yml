@@ -1,0 +1,179 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magnus-backend
+  namespace: magnus
+  labels:
+    app: magnus-backend
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: magnus-backend
+  template:
+    metadata:
+      labels:
+        app: magnus-backend
+        tier: backend
+    spec:
+      containers:
+      - name: backend
+        image: magnus-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: spring-profiles-active
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: server-port
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://$(MYSQL_HOST):$(MYSQL_PORT)/$(MYSQL_DATABASE)?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
+        - name: MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: mysql-host
+        - name: MYSQL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: mysql-port
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: mysql-database
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-user
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: magnus-db-secret
+              key: mysql-root-password
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: magnus-jwt-secret
+              key: jwt-base64-secret
+        - name: MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: prometheus-enabled
+        - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: management-endpoints-web-exposure-include
+        - name: JHIPSTER_CORS_ALLOWED_ORIGINS
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: cors-allowed-origins
+        - name: JHIPSTER_CORS_ALLOWED_METHODS
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: cors-allowed-methods
+        - name: JHIPSTER_CORS_ALLOWED_HEADERS
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: cors-allowed-headers
+        - name: JHIPSTER_CACHE_EHCACHE_TIME_TO_LIVE_SECONDS
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: cache-time-to-live
+        - name: JHIPSTER_CACHE_EHCACHE_MAX_ENTRIES
+          valueFrom:
+            configMapKeyRef:
+              name: magnus-config
+              key: cache-max-entries
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /management/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /management/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /management/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+      imagePullSecrets:
+      - name: magnus-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnus-backend
+  namespace: magnus
+  labels:
+    app: magnus-backend
+    tier: backend
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: magnus-backend
+  type: ClusterIP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: magnus-backend-hpa
+  namespace: magnus
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: magnus-backend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

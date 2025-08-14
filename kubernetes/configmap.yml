@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: magnus-config
+  namespace: magnus
+data:
+  # Database Configuration
+  mysql-host: "magnus-mysql"
+  mysql-port: "3306"
+  mysql-database: "magnus"
+  
+  # Application Configuration
+  spring-profiles-active: "prod,api-docs"
+  server-port: "8080"
+  
+  # Frontend Configuration
+  vite-api-url: "http://magnus-backend:8080/api"
+  vite-environment: "production"
+  
+  # Monitoring Configuration
+  prometheus-enabled: "true"
+  management-endpoints-web-exposure-include: "health,info,metrics,prometheus"
+  
+  # CORS Configuration
+  cors-allowed-origins: "https://your-domain.com,https://www.your-domain.com"
+  cors-allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+  cors-allowed-headers: "Authorization,Content-Type,X-Requested-With"
+  
+  # Cache Configuration
+  cache-time-to-live: "3600"
+  cache-max-entries: "2000"
